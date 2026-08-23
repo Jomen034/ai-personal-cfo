@@ -79,6 +79,22 @@
 ### Next step
 - Uji login dengan password baru, lalu lanjutkan verifikasi alur dashboard dan transaksi.
 
+## 2026-08-24 00:33 WIB — Increment 1: dashboard month totals fix
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Menemukan filter dashboard memakai batas akhir `${prefix}-32`, sehingga transaksi bulan berjalan tidak ikut terambil dan total tampil Rp0.
+- Mengganti filter dengan rentang tanggal `[awal bulan, awal bulan berikutnya)` yang valid, termasuk saat pergantian tahun.
+- Dashboard dibuat dinamis agar tidak menyajikan hasil lama setelah transaksi ditambahkan.
+- Error query agregasi kini menampilkan kendala, bukan angka nol palsu.
+
+### Open issues / unfinished work
+- Penghapusan semua household lama harus dijalankan manual sekali di Supabase SQL Editor menggunakan hak database owner/service role; tidak dimasukkan ke migration aplikasi karena bersifat destruktif.
+
+### Next step
+- Jalankan SQL cleanup household, buat satu household baru, tambah akun dan transaksi, lalu pastikan dashboard menghitung total bulan berjalan.
+
 ## Entry template (copy this for a new entry)
 
 ```

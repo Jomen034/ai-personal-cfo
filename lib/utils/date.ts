@@ -16,5 +16,12 @@ export function getCurrentMonthRange() {
   }).formatToParts(now);
   const year = parts.find((part) => part.type === "year")?.value;
   const month = parts.find((part) => part.type === "month")?.value;
-  return { start: `${year}-${month}-01`, prefix: `${year}-${month}` };
+  const currentMonth = Number(month);
+  const nextMonthDate = new Date(Date.UTC(Number(year), currentMonth, 1));
+  const nextYear = nextMonthDate.getUTCFullYear();
+  const nextMonth = String(nextMonthDate.getUTCMonth() + 1).padStart(2, "0");
+  return {
+    start: `${year}-${month}-01`,
+    end: `${nextYear}-${nextMonth}-01`,
+  };
 }
