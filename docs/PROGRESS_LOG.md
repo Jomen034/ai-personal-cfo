@@ -6,6 +6,38 @@
 
 ---
 
+## 2026-08-24 01:21 WIB — Increment 1: verification completed
+
+**Model used**: GitHub Copilot
+
+### Verification update
+Checkpoint 1A:
+- [x] Lima tabel dibuat melalui migration.
+- [x] RLS aktif dan recursion sudah diperbaiki.
+- [x] Isolasi antar-household terverifikasi melalui pengujian akun pada household berbeda: akun `bangmen034@gmail.com` di `test new household` tidak menampilkan data `Gaudete Fams`.
+- [x] Signup/login berhasil.
+- [x] Household admin dan membership dibuat.
+- [x] Join via kode undangan berjalan.
+- [x] User ketiga ditolak saat household sudah mencapai dua anggota, dengan pesan household penuh.
+- [x] `npm run dev` berjalan pada satu instance server.
+
+Checkpoint 1B:
+- [x] Account dan transaksi manual berhasil ditambahkan.
+- [x] Riwayat transaksi menampilkan data.
+- [x] Dashboard menghitung Pemasukan, Pengeluaran, dan Sisa dari data aktual.
+- [x] Format Rupiah Indonesia digunakan.
+- [x] UI menggunakan Bahasa Indonesia.
+- [x] Aplikasi diuji melalui mobile/LAN dan dapat diakses dari HP.
+- [x] `npm run dev`, lint, dan build berhasil.
+
+### Kesimpulan
+- Kriteria fungsional Increment 1 telah terverifikasi melalui pengujian aktual.
+- Increment 1 dapat dianggap selesai secara fungsional.
+- Peningkatan UI/UX tetap menjadi backlog tahap berikutnya dan tidak mengubah kelulusan kriteria fungsional saat ini.
+
+### Next step
+- Mulai iterasi UI/UX atau lanjut ke Increment 2 sesuai prioritas produk; jangan menambah scope Increment 2 sebelum diputuskan.
+
 ## 2026-08-24 01:14 WIB — Increment 1: success criteria review
 
 **Model used**: GitHub Copilot
