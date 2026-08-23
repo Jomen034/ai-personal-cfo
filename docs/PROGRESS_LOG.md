@@ -6,6 +6,33 @@
 
 ---
 
+## 2026-08-24 00:06 WIB — Increment 1: RLS recursion diagnosis
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Menganalisis tiga screenshot dan alur login, pembuatan household, serta penambahan akun.
+- Memverifikasi langsung REST API Supabase: request ke `categories` dan `households` mengembalikan HTTP 500 dengan kode `42P17` karena infinite recursion pada policy `household_members`.
+- Membuat migration `0002_fix_rls_recursion.sql` yang mengganti subquery rekursif dengan helper `SECURITY DEFINER`.
+- Memperbaiki feedback UI untuk status menyimpan, sukses membuat household, sukses menambah akun, dan error yang jelas.
+
+### Key decisions made
+- Policy tetap mengikuti scope active household dari kontrak; hanya mekanisme lookup membership yang dipindahkan ke helper aman agar tidak memanggil policy tabel yang sama.
+
+### Files changed/created
+- `supabase/migrations/0002_fix_rls_recursion.sql`
+- `components/auth/HouseholdSetup.tsx`
+- `components/profile/AccountSetup.tsx`
+- `app/(main)/dashboard/page.tsx`
+- `app/globals.css`
+
+### Open issues / unfinished work
+- Migration `0002` belum dijalankan ke project Supabase karena Supabase CLI tidak tersedia lokal.
+- Setelah migration dijalankan, perlu refresh aplikasi dan menguji household/account yang sudah ada.
+
+### Next step
+- Jalankan isi `0002_fix_rls_recursion.sql` di Supabase SQL Editor, lalu uji ulang Profil, pembuatan household, penambahan akun, dan RLS.
+
 ## Entry template (copy this for a new entry)
 
 ```
