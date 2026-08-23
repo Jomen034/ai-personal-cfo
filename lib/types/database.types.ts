@@ -28,7 +28,8 @@ export type Database = {
       };
     };
     Functions: {
-      join_household_by_invite: { Args: { join_code: string; member_name: string }; Returns: { household_id: string; member_id: string } };
+      join_household_by_invite: { Args: { join_code: string }; Returns: { household_id: string; member_id: string } };
+      create_household: { Args: { household_name: string; new_invite_code: string }; Returns: { household_id: string; invite_code?: string; already_exists: boolean } };
     };
   };
 };

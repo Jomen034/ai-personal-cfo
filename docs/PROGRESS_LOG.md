@@ -63,6 +63,25 @@
 ### Next step
 - Jalankan `0003_handle_duplicate_memberships.sql`, refresh/login ulang, lalu pastikan Profil menampilkan household aktif dan akun berhasil ditambahkan.
 
+## 2026-08-24 01:08 WIB — Increment 1: automatic email display names
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Menghapus field input display name dari onboarding.
+- Admin dan partner sekarang mendapat display name otomatis dari bagian email sebelum karakter `@`, diproses server-side melalui `auth.users`.
+- Menambahkan `0005_auto_display_names.sql` untuk mengganti signature RPC create/join household.
+- Menyelaraskan tipe database RPC dengan signature baru.
+
+### Key decisions made
+- Email login tersimpan di Supabase Auth `auth.users.email`; tabel publik hanya menyimpan display name hasil turunan, bukan password.
+
+### Open issues / unfinished work
+- `0005_auto_display_names.sql` belum dijalankan di Supabase SQL Editor.
+
+### Next step
+- Jalankan migration `0005` setelah `0004`, lalu buat/join household baru atau refresh data membership lama.
+
 ## 2026-08-24 00:28 WIB — Increment 1: login form reliability fix
 
 **Model used**: GitHub Copilot
