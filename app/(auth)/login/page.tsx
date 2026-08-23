@@ -1,0 +1,4 @@
+import Link from "next/link";
+import { AuthForm } from "@/components/auth/AuthForm";
+
+export default function LoginPage() { return <main className="auth-shell"><section className="auth-panel"><p className="brand-mark">tumara<span>·</span></p><h1>Uangmu, lebih terarah.</h1><p className="lede">Catat bersama, lihat langkah berikutnya dengan lebih jernih.</p><AuthForm mode="login" /><p className="switch-copy">Belum punya akun? <Link href="/signup">Daftar sekarang</Link></p></section><aside className="auth-aside"><span>01 / mulai</span><p>Keuangan yang rapi dimulai dari satu catatan kecil.</p></aside></main>; }

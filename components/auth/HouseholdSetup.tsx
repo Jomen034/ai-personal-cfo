@@ -1,0 +1,14 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+
+export function HouseholdSetup() {
+  const [join, setJoin] = useState(false); const [error, setError] = useState(""); const [loading, setLoading] = useState(false); const router = useRouter();
+  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setLoading(true); setError(""); const data = new FormData(event.currentTarget); const name = String(data.get("name")); const supabase = createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) { router.replace("/login"); return; }
+    if (join) { const response = await fetch("/api/household/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ inviteCode: data.get("invite_code"), displayName: name }) }); const result = await response.json(); if (!response.ok) { setError(result.error || "Household belum bisa diikuti."); setLoading(false); return; } } else { const inviteCode = crypto.randomUUID().replaceAll("-", "").slice(0, 6).toUpperCase(); const { error: householdError } = await supabase.rpc("create_household", { household_name: name, member_name: name, new_invite_code: inviteCode }); if (householdError) { setError(householdError.message); setLoading(false); return; } }
+    router.push("/dashboard"); router.refresh();
+  }
+  return <><h1>{join ? "Gabung ke ruangmu." : "Buat ruang keuangan."}</h1><p className="lede">{join ? "Masukkan kode undangan dari pasanganmu." : "Ruang ini bisa kamu bagikan dengan satu pengelola lain."}</p><div className="choice-row"><button className={!join ? "choice active" : "choice"} onClick={() => setJoin(false)} type="button">Buat baru</button><button className={join ? "choice active" : "choice"} onClick={() => setJoin(true)} type="button">Pakai kode</button></div><form onSubmit={submit} className="space-y-4"><label className="field-label">{join ? "Nama tampilan" : "Nama household"}<input name="name" required placeholder={join ? "Contoh: Rina" : "Contoh: Rumah Rina & Dimas"} /></label>{join && <label className="field-label">Kode undangan<input name="invite_code" required maxLength={6} className="tracking-[.25em] uppercase" placeholder="A3F9K2" /></label>}{error && <p className="error-text">{error}</p>}<button className="primary-button w-full" disabled={loading}>{loading ? "Menyimpan..." : join ? "Gabung sekarang" : "Buat household"}</button></form></>;
+}
