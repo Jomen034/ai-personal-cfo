@@ -6,6 +6,32 @@
 
 ---
 
+## 2026-08-24 01:14 WIB — Increment 1: success criteria review
+
+**Model used**: GitHub Copilot
+
+### Checkpoint 1A status
+- [x] Lima tabel didefinisikan dalam migration `0001`.
+- [x] RLS diterapkan dan recursion diperbaiki pada `0002`.
+- [ ] Uji RLS lintas household dengan dua akun belum dilakukan dan dicatat sebagai hasil langsung.
+- [x] Signup/login berhasil diuji di browser.
+- [x] Pembuatan household dan membership admin tersedia.
+- [x] Join via invite server-side tersedia.
+- [ ] Penolakan user ketiga pada cap dua anggota belum diuji end-to-end dan belum dicatat hasil langsung.
+- [x] `npm run dev` berhasil ketika hanya satu instance server berjalan.
+
+### Checkpoint 1B status
+- [x] Form transaksi manual tersedia dan transaksi tes terlihat di riwayat.
+- [x] Riwayat transaksi tersedia.
+- [x] Dashboard menghitung total bulan berjalan dari data nyata; bug batas tanggal sudah diperbaiki.
+- [x] Format Rupiah menggunakan locale `id-ID`.
+- [x] UI Increment 1 menggunakan Bahasa Indonesia.
+- [ ] Uji viewport mobile formal belum dicatat.
+- [x] `npm run dev`, lint, dan build berhasil pada project.
+
+### Kesimpulan
+- Increment 1 belum ditandai selesai sampai tiga item tersisa di atas benar-benar diuji: RLS lintas household, cap user ketiga, dan viewport mobile.
+
 ## 2026-08-24 01:08 WIB — Increment 1: consolidated current status
 
 **Model used**: GitHub Copilot
