@@ -37,7 +37,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     }
   }
 
-  return <form onSubmit={submit} className="space-y-4">
+  return <form method="post" action="/login" onSubmit={submit} className="space-y-4">
     <label className="field-label">Email<input name="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="nama@email.com" /></label>
     <label className="field-label">Kata sandi<input name="password" type="password" required minLength={6} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={isSignup ? "new-password" : "current-password"} placeholder="Minimal 6 karakter" /></label>
     {error && <p className="error-text">{error}</p>}

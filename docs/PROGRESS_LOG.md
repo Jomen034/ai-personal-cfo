@@ -79,6 +79,24 @@
 ### Next step
 - Uji login dengan password baru, lalu lanjutkan verifikasi alur dashboard dan transaksi.
 
+## 2026-08-24 00:51 WIB — Increment 1: LAN login delivery fix
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Log Next.js mengonfirmasi resource dev diblokir untuk origin `192.168.1.11`, sehingga browser Network tidak memuat JavaScript dan form fallback mengirim kredensial ke query string.
+- Menambahkan `allowedDevOrigins` untuk akses LAN pada `next.config.ts`.
+- Memisahkan input nama tampilan admin dari nama household saat onboarding.
+- Menambahkan migration perbaikan nama tampilan legacy admin.
+- Menambahkan fallback `POST` pada form login agar kredensial tidak pernah jatuh ke URL GET.
+
+### Verification
+- Login invalid diuji pada `http://192.168.1.11:3000/login`: URL tetap bersih, field tetap terisi, dan pesan `Email atau kata sandi tidak sesuai.` tampil.
+- `npm run lint` dan `npm run build` berhasil.
+
+### Next step
+- Restart server dev, lalu uji login Network dengan password baru dan lanjutkan pengujian transaksi/dashboard.
+
 ## 2026-08-24 00:33 WIB — Increment 1: dashboard month totals fix
 
 **Model used**: GitHub Copilot
