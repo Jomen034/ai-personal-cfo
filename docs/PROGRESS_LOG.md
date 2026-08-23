@@ -63,6 +63,22 @@
 ### Next step
 - Jalankan `0003_handle_duplicate_memberships.sql`, refresh/login ulang, lalu pastikan Profil menampilkan household aktif dan akun berhasil ditambahkan.
 
+## 2026-08-24 00:28 WIB — Increment 1: login form reliability fix
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Mereproduksi login dengan Enter di browser; handler dapat menampilkan error dan mempertahankan field.
+- Menambahkan state input dan `try/catch/finally` pada form Auth agar field tidak hilang dan error koneksi tidak diam.
+- Mengubah error login Supabase menjadi pesan Bahasa Indonesia.
+- Memperbaiki bug async `event.currentTarget` pada form akun yang dapat menyebabkan `reset()` membaca `null`.
+
+### Open issues / unfinished work
+- URL pada screenshot memuat kredensial sebagai query string; password akun tersebut harus segera diganti.
+
+### Next step
+- Uji login dengan password baru, lalu lanjutkan verifikasi alur dashboard dan transaksi.
+
 ## Entry template (copy this for a new entry)
 
 ```
