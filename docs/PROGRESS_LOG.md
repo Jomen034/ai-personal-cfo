@@ -82,6 +82,21 @@
 ### Next step
 - Jalankan migration `0005` setelah `0004`, lalu buat/join household baru atau refresh data membership lama.
 
+## 2026-08-24 01:20 WIB — Increment 1: normalize legacy display names
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Menambahkan `0006_sync_all_display_names.sql` untuk mengubah seluruh display name membership lama menjadi bagian email sebelum `@`.
+- Dengan ini nilai lama seperti `jomend test` akan menjadi `jomend.pardede` jika email akun tersebut memang `jomend.pardede@...`.
+
+### Key decisions made
+- Email tidak diduplikasi ke tabel publik baru. Supabase Auth sudah menyimpan email terdaftar dan metadata login pada `auth.users`, termasuk `last_sign_in_at`.
+- Penambahan tabel statistik email berada di luar schema Increment 1 dan berisiko membuat data Auth tidak sinkron.
+
+### Next step
+- Jalankan migration `0006` di Supabase SQL Editor, lalu query `auth.users` untuk statistik internal menggunakan akses admin.
+
 ## 2026-08-24 00:28 WIB — Increment 1: login form reliability fix
 
 **Model used**: GitHub Copilot
