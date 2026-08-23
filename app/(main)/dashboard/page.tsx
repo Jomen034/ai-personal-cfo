@@ -6,7 +6,7 @@ import { getCurrentMonthRange } from "@/lib/utils/date";
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ household?: string }> }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const { data: membership } = await supabase.from("household_members").select("household_id, display_name, households(name)").eq("auth_user_id", user!.id).eq("is_active", true).maybeSingle();
+  const { data: membership } = await supabase.from("household_members").select("household_id, display_name, households(name)").eq("auth_user_id", user!.id).eq("is_active", true).order("created_at", { ascending: false }).limit(1).maybeSingle();
   if (!membership) return <EmptyState />;
   const { prefix } = getCurrentMonthRange();
   const { data: transactions } = await supabase.from("transactions").select("amount, transaction_type").eq("household_id", membership.household_id).gte("transaction_date", `${prefix}-01`).lt("transaction_date", `${prefix}-32`);

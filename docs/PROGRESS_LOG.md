@@ -33,6 +33,36 @@
 ### Next step
 - Jalankan isi `0002_fix_rls_recursion.sql` di Supabase SQL Editor, lalu uji ulang Profil, pembuatan household, penambahan akun, dan RLS.
 
+## 2026-08-24 00:20 WIB — Increment 1: duplicate membership fix
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Memverifikasi endpoint Supabase kembali normal setelah `0002` diterapkan.
+- Menemukan penyebab UI tetap kosong setelah household dibuat dua kali: `.maybeSingle()` gagal saat user memiliki lebih dari satu membership aktif, sehingga data dibaca sebagai `null`.
+- Semua query membership kini memilih membership aktif terbaru secara deterministik.
+- Fungsi pembuatan household kini menolak household kedua untuk akun yang sama.
+- Form akun tidak lagi mengirim UUID kosong dan menampilkan alasan yang jelas bila household belum tersedia.
+
+### Key decisions made
+- Membership lama tidak dihapus otomatis karena data tersebut berpotensi memiliki histori; aplikasi memilih membership aktif terbaru sampai data dibersihkan secara sadar.
+
+### Files changed/created
+- `supabase/migrations/0003_handle_duplicate_memberships.sql`
+- `app/(main)/dashboard/page.tsx`
+- `app/(main)/profil/page.tsx`
+- `app/(main)/transaksi/page.tsx`
+- `app/(main)/transaksi/baru/page.tsx`
+- `components/auth/HouseholdSetup.tsx`
+- `components/profile/AccountSetup.tsx`
+
+### Open issues / unfinished work
+- Migration `0003` harus dijalankan di Supabase SQL Editor.
+- Duplikasi household lama belum dihapus; perlu ditinjau berdasarkan membership dan histori transaksi.
+
+### Next step
+- Jalankan `0003_handle_duplicate_memberships.sql`, refresh/login ulang, lalu pastikan Profil menampilkan household aktif dan akun berhasil ditambahkan.
+
 ## Entry template (copy this for a new entry)
 
 ```
