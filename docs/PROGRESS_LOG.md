@@ -6,6 +6,47 @@
 
 ---
 
+## 2026-08-24 01:08 WIB — Increment 1: consolidated current status
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Project Next.js 16.3.2, Supabase client/SSR, App Router, Tailwind, auth, household onboarding, accounts, transactions, dashboard, profil, dan RLS sudah dibuat.
+- Remote GitHub `origin` sudah terhubung dan seluruh perubahan sudah dipush ke `main`.
+- RLS recursion berhasil didiagnosis melalui REST API Supabase (`42P17`) dan diperbaiki pada migration `0002`.
+- Duplicate membership ditangani pada `0003`; query membership memilih membership aktif terbaru dan household kedua untuk akun yang sama dicegah.
+- Error sintaks PostgreSQL pada `0004` diperbaiki.
+- Display name sekarang otomatis berasal dari `auth.users.email` untuk admin dan partner melalui `0005`; field input display name sudah dihapus.
+- Display name legacy seperti `jomend test` dinormalisasi melalui `0006` menjadi bagian email sebelum `@`.
+- Bug dashboard Rp0 diperbaiki dengan rentang tanggal awal bulan sampai awal bulan berikutnya.
+- Bug form login Network diperbaiki dengan `allowedDevOrigins` dan fallback `POST`; login Network sudah diuji dengan URL tetap bersih dan field tetap terisi saat kredensial salah.
+- Bug async `event.currentTarget.reset()` pada form account diperbaiki.
+
+### Key decisions made
+- Email login tidak diduplikasi ke tabel publik. Email, waktu pendaftaran, dan `last_sign_in_at` tetap dikelola Supabase Auth pada `auth.users`.
+- Migration destruktif untuk menghapus household tidak dimasukkan ke aplikasi; cleanup manual harus dijalankan sadar di SQL Editor.
+- Nama household dan display name adalah dua data berbeda. Display name baru tidak dapat diatur manual dan diturunkan server-side dari email.
+
+### Files changed/created
+- `app/`, `components/`, `lib/`, `proxy.ts`, `next.config.ts`
+- `supabase/migrations/0001_increment1_core_schema.sql` sampai `0006_sync_all_display_names.sql`
+- `.env.local.example`, `.gitignore`, `package.json`, `docs/PROGRESS_LOG.md`
+
+### Verification
+- `npm run lint` berhasil.
+- `npm run build` berhasil.
+- `npm run dev` berhasil pada `localhost:3000` dan `192.168.1.11:3000`.
+- Login invalid diuji melalui browser pada Network URL; URL tidak lagi memuat kredensial.
+- Supabase REST API terverifikasi normal setelah `0002`; data protected tidak diklaim terverifikasi tanpa sesi user/admin.
+
+### Open issues / unfinished work
+- Migration `0004`, `0005`, dan `0006` harus dijalankan di Supabase SQL Editor bila belum dijalankan.
+- Data household duplikat lama perlu dihapus manual setelah memastikan household yang benar dan histori transaksi yang dipertahankan.
+- Pengujian RLS lintas household, cap tiga anggota, dan seluruh checkpoint Increment 1 belum dinyatakan selesai secara formal.
+
+### Next step
+- Jalankan migration `0004` sampai `0006` sesuai urutan, bersihkan household duplikat dengan SQL yang disengaja, lalu lakukan uji end-to-end Auth, RLS, invite, account, transaksi, dashboard, dan mobile.
+
 ## 2026-08-24 00:06 WIB — Increment 1: RLS recursion diagnosis
 
 **Model used**: GitHub Copilot
