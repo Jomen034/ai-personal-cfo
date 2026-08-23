@@ -57,9 +57,9 @@
 ### Open issues / unfinished work
 - Checkpoint 1A belum terverifikasi: migration belum diterapkan, signup/login dan RLS cross-household belum diuji dengan dua akun, cap anggota belum diuji langsung.
 - Checkpoint 1B belum terverifikasi terhadap database nyata dan belum diuji pada viewport mobile.
-- GitHub remote belum dikonfigurasi; belum ada push.
+- GitHub remote sudah dikonfigurasi sebagai `origin` dan fondasi sudah dipush ke branch `main` setelah menggabungkan commit awal remote.
 
 ### Next step
-- Jalankan migration ke project Supabase, lakukan pengujian Auth/RLS/invite end-to-end, lalu kirim URL repository GitHub untuk dikonfigurasi sebagai `origin`.
+- Jalankan migration ke project Supabase, lakukan pengujian Auth/RLS/invite end-to-end, lalu push hanya setelah Checkpoint 1A terverifikasi penuh.
 
 The first entry will be added once Increment 1 (Core Tracker — see `/docs/AI_CFO_MASTER_ROADMAP.md`) begins. Until the first entry exists, `/docs/AI_CFO_MASTER_ROADMAP.md` is the primary starting-point reference.
