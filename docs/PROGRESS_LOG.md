@@ -97,6 +97,17 @@
 ### Next step
 - Restart server dev, lalu uji login Network dengan password baru dan lanjutkan pengujian transaksi/dashboard.
 
+## 2026-08-24 01:02 WIB — Increment 1: legacy display-name migration syntax
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Memperbaiki error PostgreSQL `42P01` pada `0004_fix_legacy_display_names.sql`; target alias `members` kini hanya direferensikan di `WHERE`.
+- Memastikan onboarding baru mengirim `display_name` terpisah untuk admin dan partner, sementara nama household dikirim melalui field tersendiri.
+
+### Next step
+- Jalankan ulang isi `0004_fix_legacy_display_names.sql` di Supabase SQL Editor, lalu pastikan setiap membership memiliki display name yang sesuai.
+
 ## 2026-08-24 00:33 WIB — Increment 1: dashboard month totals fix
 
 **Model used**: GitHub Copilot
