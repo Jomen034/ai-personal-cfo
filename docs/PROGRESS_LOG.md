@@ -6,6 +6,30 @@
 
 ---
 
+## 2026-08-24 22:03 WIB — Increment 2: transaction detail and PWA foundation
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Membaca ulang `AGENTS.md`, `PROGRESS_LOG.md`, dan `INCREMENT_2_SPEC.md` sebelum melanjutkan.
+- Menambahkan tombol `Detail` pada setiap transaksi di riwayat.
+- Menambahkan halaman detail transaksi read-only dengan tipe, jumlah, kategori, akun, tanggal, catatan, dan anggota pencatat.
+- Detail mengambil data menggunakan transaction ID dan household aktif; transaksi household lain tidak dapat dibaca.
+- Menambahkan manifest PWA `Tumara` dengan metadata Bahasa Indonesia dan mode standalone.
+
+### Verification
+- `npm run lint` berhasil.
+- `npm run build` berhasil.
+- Route `/transaksi/[id]` dan `/manifest.webmanifest` terdeteksi oleh Next.js.
+
+### Open issues / unfinished work
+- Deployment Vercel dan pengujian install PWA di HP belum dilakukan.
+- Belum diputuskan apakah beta nyata memakai project Supabase sekarang atau project produksi terpisah dari data tes.
+- Icon manifest masih memakai favicon; icon PWA ukuran khusus dapat ditambahkan saat persiapan release.
+
+### Next step
+- Putuskan project Supabase produksi, deploy ke Vercel, konfigurasi environment/Auth redirect, lalu uji PWA live dengan dua akun.
+
 ## 2026-08-24 21:30 WIB — Increment 2 scope refinement: transaction details
 
 **Model used**: GitHub Copilot
