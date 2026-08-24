@@ -6,6 +6,29 @@
 
 ---
 
+## 2026-08-24 23:18 WIB — Increment 2: finance dashboard UX redesign
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Redesigned the authenticated dashboard around a prominent monthly remaining balance, compact income/expense summaries, recent activity, and a direct account-management action.
+- Added a dedicated `/akun` screen for household account management instead of using the Profile page as an account destination.
+- Added Lucide icons to desktop and mobile navigation.
+- Kept mobile navigation as a single bottom bar and preserved the header for brand/logout only.
+- Added mobile spacing and responsive layout rules for the new balance hero, account summary, and recent activity sections.
+
+### Verification
+- `npm run lint` passed.
+- `npm run build` passed.
+- Local mobile smoke test at 390x844 showed no horizontal overflow; public auth page correctly has no authenticated navigation.
+
+### Open issues / unfinished work
+- Authenticated dashboard and account screen still need visual review on the production PWA with a real session.
+- Privacy mode, trend visualization, and broader state review remain outside this slice.
+
+### Next step
+- Verify the redesigned authenticated screens on the production PWA, then continue the Increment 2 UX review without adding later-increment finance features.
+
 ## 2026-08-24 23:05 WIB — Increment 2: duplicate mobile navigation fix
 
 **Model used**: GitHub Copilot
