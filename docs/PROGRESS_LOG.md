@@ -6,6 +6,27 @@
 
 ---
 
+## 2026-08-24 22:18 WIB — Increment 2: production smoke test
+
+**Model used**: GitHub Copilot
+
+### Verification
+- Production URL `https://ai-personal-cfo-plum.vercel.app/` merespons dari Vercel dan mengarahkan root ke `/login`.
+- Halaman login production memiliki title `Tumara`.
+- `/manifest.webmanifest` merespons HTTP 200 dengan nama `Tumara`, bahasa `id-ID`, mode `standalone`, dan warna tema Tumara.
+- Route protected `/dashboard` tanpa sesi mengarahkan kembali ke `/login`.
+- Login invalid production mempertahankan email/password di field, menampilkan error Bahasa Indonesia, dan tidak menaruh kredensial di URL.
+- Halaman login diuji pada viewport mobile 390x844 tanpa overflow horizontal.
+- Menambahkan metadata viewport/theme color agar browser mobile menerima tema PWA langsung dari HTML.
+
+### Open issues / unfinished work
+- Install/open PWA di perangkat HP sudah dilaporkan berhasil oleh pemilik, tetapi tidak dapat direplikasi dari browser automation ini.
+- Production environment variables dan Supabase Auth redirect tervalidasi secara fungsional oleh halaman deployment, tetapi konfigurasi dashboard Vercel/Supabase tidak dapat dibaca dari anon key.
+- Icon manifest saat ini memakai favicon `any`; icon PNG 192/512 dapat ditambahkan pada polishing release.
+
+### Next step
+- Uji login dua user nyata di domain production, buka detail transaksi, lalu lakukan review UX mobile Increment 2.
+
 ## 2026-08-24 22:04 WIB — Increment 2: live beta Supabase decision
 
 **Model used**: GitHub Copilot
