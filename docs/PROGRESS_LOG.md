@@ -6,6 +6,24 @@
 
 ---
 
+## 2026-08-24 22:04 WIB — Increment 2: live beta Supabase decision
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Project owner memutuskan untuk langsung memakai project Supabase saat ini untuk live beta.
+- `docs/INCREMENT_2_SPEC.md` diperbarui agar keputusan ini menjadi scope resmi.
+
+### Key decisions made
+- Data tes wajib dibersihkan atau dipisahkan dengan jelas sebelum household nyata dipakai bersama pasangan.
+- Tidak membuat project Supabase terpisah untuk deployment pertama.
+
+### Open issues / unfinished work
+- Deployment Vercel belum dimulai karena Vercel CLI belum tersedia dan autentikasi Vercel belum dilakukan.
+
+### Next step
+- Login ke Vercel, import repository GitHub `main`, masukkan dua environment variable Supabase, dan konfigurasi URL Auth production.
+
 ## 2026-08-24 22:03 WIB — Increment 2: transaction detail and PWA foundation
 
 **Model used**: GitHub Copilot

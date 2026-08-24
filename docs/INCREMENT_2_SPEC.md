@@ -19,7 +19,7 @@ Make the current manual tracker usable as a real hosted PWA for the owner and sp
   - Redirect URLs: the production Vercel URL and its auth callback paths when used
 - Add a production deployment checklist to the progress log before calling the deployment complete.
 - Add a lightweight health check that confirms the app can render and reach Supabase without exposing private data.
-- Use a separate Supabase project for production if the current project contains test data. Do not silently mix personal real data with test fixtures.
+- Use the current Supabase project for the first live beta, as explicitly decided by the project owner. Before real use, remove or clearly isolate test households and transactions; do not silently mix test fixtures with the shared household's real data.
 
 ## 3. PWA minimum requirements
 
