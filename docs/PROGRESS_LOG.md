@@ -6,6 +6,21 @@
 
 ---
 
+## 2026-08-24 23:05 WIB — Increment 2: duplicate mobile navigation fix
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Investigated the PWA report that two navigation bars appeared simultaneously.
+- Found the root cause in CSS specificity: `.topbar nav` (`display: flex`) overrode `.desktop-nav { display: none }` at mobile width.
+- Changed the mobile selector to `.topbar .desktop-nav`, so mobile shows only the fixed bottom navigation while the header retains the brand and logout action.
+
+### Verification
+- `npm run lint`, `npm run build`, and `git diff --check` passed.
+
+### Next step
+- Wait for Vercel to deploy this commit, then hard-refresh/reopen the installed PWA and confirm only one navigation bar is visible.
+
 ## 2026-08-24 22:55 WIB — Increment 2: production release verification
 
 **Model used**: GitHub Copilot
