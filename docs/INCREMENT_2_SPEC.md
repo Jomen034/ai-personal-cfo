@@ -41,6 +41,18 @@ Make the current manual tracker usable as a real hosted PWA for the owner and sp
 
 Use Bibit and other polished Indonesian finance apps as behavioral references only: clear hierarchy, calm financial context, easy scanning, strong primary action, compact summary modules, bottom navigation on mobile, and a focused onboarding flow. Do not copy Bibit's source code, illustrations, icons, exact colors, typography, layout, wording, or proprietary assets.
 
+### Budggt reference notes
+
+The supplied references are `Budggt Desktop Demo` and `Budggt Mobile Demo - Web App Budgeting dengan AI Assistant`. Their desktop/mobile pairing supports these product principles for Tumara:
+
+- Desktop and mobile are two deliberate presentations of the same financial model, not unrelated screens.
+- Mobile should prioritize quick scanning, one-handed navigation, and a direct next action.
+- Budgeting and financial context should be visible before advanced assistant features.
+- An AI assistant should support the user's financial workflow rather than displace deterministic totals and records.
+- Any future assistant, anomaly detection, or projection feature remains outside Increment 2 and must follow the AI-agnostic and privacy rules in later increment specs.
+
+The videos were not machine-transcribed in this session because YouTube returned HTTP 401 to automated page retrieval. These notes use the public video titles plus the existing roadmap's Budggt research, and do not claim unverified screen-level details.
+
 ### Information architecture
 
 - Mobile primary navigation: `Ringkasan`, `Transaksi`, `Akun`, `Profil`.

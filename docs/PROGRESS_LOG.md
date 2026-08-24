@@ -6,6 +6,23 @@
 
 ---
 
+## 2026-08-24 23:42 WIB — Increment 2 research: Budggt references
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Reviewed the two supplied YouTube references through public metadata.
+- Confirmed titles: `Budggt Desktop Demo` and `Budggt Mobile Demo - Web App Budgeting dengan AI Assistant`.
+- Added bounded Budggt reference notes to `docs/INCREMENT_2_SPEC.md`: desktop/mobile parity, budgeting context before advanced assistance, quick scanning, one-handed action, and AI as a supporting layer.
+
+### Key decisions made
+- YouTube returned HTTP 401 for automated transcript/page retrieval, so no unverified screen-level claims were added.
+- Budggt is used as a behavioral/product reference only; no source code, assets, exact layout, copy, colors, or proprietary visuals are copied.
+- AI assistant, anomaly detection, and projections remain outside Increment 2.
+
+### Next step
+- Apply the reference principles during the remaining Increment 2 production UX review.
+
 ## 2026-08-24 23:18 WIB — Increment 2: finance dashboard UX redesign
 
 **Model used**: GitHub Copilot
