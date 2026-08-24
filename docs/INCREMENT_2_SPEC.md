@@ -67,7 +67,7 @@ Use Bibit and other polished Indonesian finance apps as behavioral references on
 ### Transaction detail
 
 - Each transaction row in the history must have a clear `Detail` action, localized as `Lihat detail` or `Detail`.
-- The detail view may be a dedicated route or a bottom sheet/modal, but it must work reliably on mobile and desktop.
+- The detail view must be a dialog/modal or bottom sheet so the user returns directly to the visible transaction list.
 - Show the complete stored transaction context: transaction type, amount, category, account used, date, note when present, and the household member who recorded it.
 - Keep the summary list compact; do not repeat every detail in the row.
 - The detail view must be read-only in this increment. Editing and deleting transactions are separate decisions and are not included unless explicitly added to the scope.

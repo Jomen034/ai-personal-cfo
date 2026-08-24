@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-08-24 22:31 WIB — Increment 2: transaction detail dialog
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Mengubah detail transaksi dari navigasi halaman menjadi dialog read-only di atas daftar transaksi.
+- Menambahkan tombol `Detail` pada setiap baris.
+- Dialog menampilkan jenis, jumlah, kategori, akun, tanggal, catatan, dan anggota pencatat.
+- Dialog dapat ditutup melalui tombol `X`, klik area luar dialog, atau tombol `Escape`.
+- Tombol tutup menerima fokus otomatis dan memiliki label aksesibilitas.
+- Menghapus route detail terpisah agar pengalaman yang disepakati konsisten.
+- Memperbarui kontrak Increment 2 dan menambahkan kriteria Done detail transaksi.
+
+### Verification
+- `npm run lint`, `npm run build`, dan `git diff --check` berhasil.
+- Daftar transaksi tanpa sesi diuji dan tetap diarahkan ke login oleh auth guard; pembukaan dialog dengan data nyata menunggu sesi autentikasi pada environment pengujian.
+
+### Next step
+- Lanjutkan hosting/PWA release Increment 2 dan uji dialog dari domain production menggunakan dua akun beta.
+
 ## 2026-08-24 22:18 WIB — Increment 2: production smoke test
 
 **Model used**: GitHub Copilot
