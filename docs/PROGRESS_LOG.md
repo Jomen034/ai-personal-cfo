@@ -6,6 +6,24 @@
 
 ---
 
+## 2026-08-24 22:55 WIB — Increment 2: production release verification
+
+**Model used**: GitHub Copilot
+
+### Verified
+- Production URL `https://ai-personal-cfo-plum.vercel.app` is reachable.
+- `/api/health` returns HTTP 200 with `{"status":"ok","service":"tumara"}`.
+- `/manifest.webmanifest` returns HTTP 200 with Tumara metadata, Indonesian locale, standalone display mode, and explicit 192x192/512x512 icons.
+- `/icon-192.svg` and `/icon-512.svg` each return HTTP 200.
+- Production login renders with title `Tumara`, manifest link, theme color, and no horizontal overflow at 390x844.
+
+### Not yet verified
+- The authenticated production browser tab was unavailable to automation, so the new bottom navigation and transaction detail dialog were not claimed as real-data production tests.
+- Two-user shared-household testing and full production state review still require manual beta-user testing.
+
+### Next step
+- Test the authenticated production flow from the owner's and spouse's phones: navigate through all four mobile destinations, open and close a transaction detail dialog, add one real transaction, and confirm the summary updates.
+
 ## 2026-08-24 22:54 WIB — Increment 2: release foundation progress
 
 **Model used**: GitHub Copilot
