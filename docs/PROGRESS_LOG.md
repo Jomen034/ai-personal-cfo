@@ -339,10 +339,10 @@ Checkpoint 1B:
 
 The first entry was created when Increment 1 began. Keep this template at the bottom of the file and add new entries above the historical log.
 
-## Entry template (copy this for a new entry)
+### Entry template (copy this for a new entry)
 
 ```
-## [YYYY-MM-DD HH:MM timezone] — Increment X: [Increment Name]
+### [YYYY-MM-DD HH:MM timezone] — Increment X: [Increment Name]
 
 **Model used**: [e.g. Gemini 2.5 Pro / GPT-5 / etc. — be specific, not just the provider name]
 **Session duration** (optional): [e.g. ~45 min]
