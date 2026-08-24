@@ -6,6 +6,26 @@
 
 ---
 
+## 2026-08-24 21:23 WIB — Increment 1 maintenance: hydration warning review
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Meninjau log dev server terbaru.
+- Mengidentifikasi hydration mismatch pada saldo akun: Node menghasilkan spasi non-breaking pada `Intl.NumberFormat`, sedangkan browser menghasilkan format berbeda.
+- Menormalkan spasi pada helper `formatRupiah` dan mengganti formatter lokal di daftar akun dengan helper bersama.
+- Mengonfirmasi atribut `__gcr...` berasal dari ekstensi browser, bukan aplikasi Tumara.
+- Menghapus teks boilerplate `first entry` yang sudah tidak relevan dan mempertahankan template di bagian paling bawah log.
+
+### Verification
+- `npm run lint`, `npm run build`, dan `git diff --check` berhasil.
+
+### Open issues / unfinished work
+- URL lama pada log masih memuat kredensial karena merupakan histori terminal; password terkait harus diganti dan URL lama tidak boleh dibuka kembali.
+
+### Next step
+- Lanjutkan persiapan hosting publik sesuai `docs/INCREMENT_2_SPEC.md`.
+
 ## 2026-08-24 21:15 WIB — Increment 1 complete: instruction and Increment 2 preparation
 
 **Model used**: GitHub Copilot
@@ -64,6 +84,9 @@ Checkpoint 1B:
 
 ### Next step
 - Mulai iterasi UI/UX atau lanjut ke Increment 2 sesuai prioritas produk; jangan menambah scope Increment 2 sebelum diputuskan.
+
+### Chronology note
+- Entri baru selalu ditambahkan di bagian paling atas. Entri historis di bawah ini dipertahankan apa adanya sebagai arsip append-only dari sesi sebelumnya.
 
 ## 2026-08-24 01:14 WIB — Increment 1: success criteria review
 
@@ -284,32 +307,6 @@ Checkpoint 1B:
 ### Next step
 - Jalankan SQL cleanup household, buat satu household baru, tambah akun dan transaksi, lalu pastikan dashboard menghitung total bulan berjalan.
 
-## Entry template (copy this for a new entry)
-
-```
-## [YYYY-MM-DD HH:MM timezone] — Increment X: [Increment Name]
-
-**Model used**: [e.g. Gemini 2.5 Pro / GPT-5 / etc. — be specific, not just the provider name]
-**Session duration** (optional): [e.g. ~45 min]
-
-### What was done
-- (bullet points, concise)
-
-### Key decisions made
-- (e.g. schema structure choices, trade-offs taken — including any deviation from the roadmap and why)
-
-### Files changed/created
-- (list of main files/folders)
-
-### Open issues / unfinished work
-- (what still needs doing, known bugs, etc.)
-
-### Next step
-- (concrete plan for the next session)
-```
-
-**Timestamp format note**: use `YYYY-MM-DD HH:MM` plus timezone (e.g. `2026-08-22 14:30 WIB`). Get the current timestamp from the system clock at the time of writing the entry — do not estimate or leave it blank.
-
 ---
 
 ## 2026-08-23 23:08 WIB — Increment 1: Core Tracker
@@ -340,4 +337,30 @@ Checkpoint 1B:
 ### Next step
 - Jalankan migration ke project Supabase, lakukan pengujian Auth/RLS/invite end-to-end, lalu push hanya setelah Checkpoint 1A terverifikasi penuh.
 
-The first entry will be added once Increment 1 (Core Tracker — see `/docs/AI_CFO_MASTER_ROADMAP.md`) begins. Until the first entry exists, `/docs/AI_CFO_MASTER_ROADMAP.md` is the primary starting-point reference.
+The first entry was created when Increment 1 began. Keep this template at the bottom of the file and add new entries above the historical log.
+
+## Entry template (copy this for a new entry)
+
+```
+## [YYYY-MM-DD HH:MM timezone] — Increment X: [Increment Name]
+
+**Model used**: [e.g. Gemini 2.5 Pro / GPT-5 / etc. — be specific, not just the provider name]
+**Session duration** (optional): [e.g. ~45 min]
+
+### What was done
+- (bullet points, concise)
+
+### Key decisions made
+- (e.g. schema structure choices, trade-offs taken — including any deviation from the roadmap and why)
+
+### Files changed/created
+- (list of main files/folders)
+
+### Open issues / unfinished work
+- (what still needs doing, known bugs, etc.)
+
+### Next step
+- (concrete plan for the next session)
+```
+
+**Timestamp format note**: use `YYYY-MM-DD HH:MM` plus timezone (e.g. `2026-08-22 14:30 WIB`). Get the current timestamp from the system clock at the time of writing the entry — do not estimate or leave it blank.

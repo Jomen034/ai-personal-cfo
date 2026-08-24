@@ -5,5 +5,5 @@ const idrFormatter = new Intl.NumberFormat("id-ID", {
 });
 
 export function formatRupiah(amount: number | string) {
-  return idrFormatter.format(Number(amount));
+  return idrFormatter.format(Number(amount)).replace(/\u00a0/g, " ");
 }
