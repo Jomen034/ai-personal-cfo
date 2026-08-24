@@ -30,6 +30,7 @@ Tumara is an AI Personal CFO for Indonesian individuals, couples, and families. 
 - Free-tools-first: prefer free tiers and document paid exceptions in `PROGRESS_LOG.md`.
 - Iterative: build strictly in the current increment order; do not jump to later features.
 - Bahasa Indonesia: all user-facing labels, categories, errors, notifications, and buttons must use natural Bahasa Indonesia.
+- Internal engineering documentation, progress logs, and agent instructions should use clear English for consistent cross-model understanding. This does not apply to user-facing product copy.
 - Privacy: use RLS for household isolation, minimize stored data, and follow the roadmap's AI privacy rules.
 - Confirm major architectural or product decisions with the project owner before implementing them.
 

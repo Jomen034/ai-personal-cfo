@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-08-24 22:58 WIB — Documentation language policy
+
+**Model used**: GitHub Copilot
+
+### Decision
+- User-facing application copy remains natural Bahasa Indonesia.
+- Internal engineering documentation and future progress-log entries use clear English for consistent understanding across models and sessions.
+- Existing historical entries remain unchanged because this file is append-only; this policy applies from this entry onward.
+
+### Next step
+- Continue Increment 2 with English progress updates and Indonesian product UI.
+
 ## 2026-08-24 22:49 WIB — Increment 2 audit: partial completion
 
 **Model used**: GitHub Copilot
