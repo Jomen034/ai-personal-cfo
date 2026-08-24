@@ -6,6 +6,28 @@
 
 ---
 
+## 2026-08-24 22:54 WIB — Increment 2: release foundation progress
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Added `/api/health`, which checks Supabase system categories and returns only service status.
+- Added explicit 192x192 and 512x512 PWA SVG icons and wired them into the manifest.
+- Added mobile bottom navigation for `Ringkasan`, `Transaksi`, `Akun`, and `Profil`; desktop navigation keeps the same destinations.
+- Added an `Akun` anchor to the profile account section.
+
+### Verification
+- `npm run lint` passed.
+- `npm run build` passed.
+- Temporary local smoke test returned `{"status":"ok","service":"tumara"}` from `/api/health`.
+
+### Open issues / unfinished work
+- These changes are not yet verified on the production URL; Vercel must deploy the new commit first.
+- Production two-user testing, real transaction detail dialog testing, and complete mobile state review remain open.
+
+### Next step
+- Push this release foundation, wait for Vercel deployment, then verify `/api/health`, manifest icons, mobile navigation, and transaction dialog on production.
+
 ## 2026-08-24 22:58 WIB — Documentation language policy
 
 **Model used**: GitHub Copilot
