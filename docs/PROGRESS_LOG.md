@@ -6,6 +6,33 @@
 
 ---
 
+## 2026-08-24 21:15 WIB — Increment 1 complete: instruction and Increment 2 preparation
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Memeriksa `AGENTS_ORIGIN.md` dan mengonfirmasi bahwa itu adalah aturan Tumara asli yang sebelumnya tertimpa oleh generator Next.js.
+- Memulihkan aturan Tumara ke `AGENTS.md` sambil mempertahankan blok generator Next.js di bagian atas.
+- Menyimpan `AGENTS_ORIGIN.md` sebagai arsip sumber asli.
+- Menambahkan `docs/INCREMENT_2_SPEC.md` sebagai kontrak untuk hosting live/PWA dan UX foundation.
+
+### Key decisions made
+- Deployment live dijadikan prioritas increment terdekat agar pemilik dan pasangan dapat memakai PWA sebagai beta users dengan project Supabase produksi yang terpisah dari data tes.
+- Bibit digunakan hanya sebagai referensi pola UX aplikasi finansial modern: hierarchy, scanning, primary action, dan mobile navigation. Tidak menyalin source code, aset, typography, warna, wording, atau layout proprietary.
+- `AGENTS.md` harus mempertahankan dua bagian: aturan generator Next.js dan aturan domain Tumara.
+
+### Files changed/created
+- `AGENTS.md`
+- `AGENTS_ORIGIN.md`
+- `docs/INCREMENT_2_SPEC.md`
+
+### Open issues / unfinished work
+- Hosting Vercel belum dibuat dan domain produksi belum ditetapkan.
+- Project Supabase saat ini masih berisi data pengujian; perlu keputusan apakah membuat project produksi terpisah sebelum live beta.
+
+### Next step
+- Siapkan deployment Vercel, konfigurasi environment production, manifest/installable PWA, lalu uji live dari HP dengan dua akun nyata sesuai `INCREMENT_2_SPEC.md`.
+
 ## 2026-08-24 01:21 WIB — Increment 1: verification completed
 
 **Model used**: GitHub Copilot
