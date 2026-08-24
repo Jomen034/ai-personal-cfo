@@ -6,6 +6,23 @@
 
 ---
 
+## 2026-08-24 21:30 WIB — Increment 2 scope refinement: transaction details
+
+**Model used**: GitHub Copilot
+
+### What was done
+- Menambahkan kebutuhan `Detail` transaksi ke `docs/INCREMENT_2_SPEC.md`.
+- Detail bersifat read-only dan menampilkan tipe, jumlah, kategori, akun yang digunakan, tanggal, catatan, serta anggota yang mencatat.
+- Menambahkan kriteria Done untuk membuka detail transaksi dari riwayat.
+
+### Key decisions made
+- Daftar transaksi tetap ringkas untuk scanning; detail dibuka melalui route aman atau modal/bottom sheet.
+- Edit dan hapus transaksi tidak otomatis ikut masuk scope karena memerlukan keputusan produk dan aturan audit histori.
+- Data transaksi tidak boleh diletakkan di query string; hanya opaque transaction ID yang boleh digunakan sebagai parameter route, tetap dilindungi RLS.
+
+### Next step
+- Implementasikan detail read-only pada Increment 2 bersamaan dengan redesign UX dan deployment PWA live.
+
 ## 2026-08-24 21:23 WIB — Increment 1 maintenance: hydration warning review
 
 **Model used**: GitHub Copilot

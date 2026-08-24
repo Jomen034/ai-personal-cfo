@@ -64,6 +64,16 @@ Use Bibit and other polished Indonesian finance apps as behavioral references on
 - After save, show confirmation and navigate to the updated transaction list or summary.
 - Use the shared currency/date utilities everywhere.
 
+### Transaction detail
+
+- Each transaction row in the history must have a clear `Detail` action, localized as `Lihat detail` or `Detail`.
+- The detail view may be a dedicated route or a bottom sheet/modal, but it must work reliably on mobile and desktop.
+- Show the complete stored transaction context: transaction type, amount, category, account used, date, note when present, and the household member who recorded it.
+- Keep the summary list compact; do not repeat every detail in the row.
+- The detail view must be read-only in this increment. Editing and deleting transactions are separate decisions and are not included unless explicitly added to the scope.
+- Provide an accessible close/back action and ensure keyboard focus is usable when a modal is used.
+- Never put transaction details or private data in the URL query string. A route parameter containing only an opaque transaction ID is acceptable when protected by the existing RLS query.
+
 ### Visual system
 
 - Choose an intentional Tumara identity, not a Bibit clone: green may remain an accent, but pair it with a distinct warm neutral and one contrasting action color.
@@ -82,6 +92,7 @@ Use Bibit and other polished Indonesian finance apps as behavioral references on
 - [ ] Owner and spouse can log in with separate accounts and see the same household.
 - [ ] A household cannot see another household's data in production.
 - [ ] One real transaction can be added, displayed in history, and reflected in the summary.
+- [ ] Each recorded transaction can open a complete read-only detail view from the history, including the account used.
 - [ ] Mobile navigation and empty/loading/error/success states are reviewed.
 - [ ] `npm run lint`, `npm run build`, and a production smoke test pass.
 - [ ] `PROGRESS_LOG.md` records the deployment URL, test date, users tested, and any remaining risks.
