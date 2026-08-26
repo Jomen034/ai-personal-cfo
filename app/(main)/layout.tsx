@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 import { CircleUserRound, House, Plus, WalletCards, History } from "lucide-react";
 
 export default async function MainLayout({ children }: { children: React.ReactNode }) {
