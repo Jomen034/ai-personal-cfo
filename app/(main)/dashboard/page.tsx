@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { formatRupiah } from "@/lib/utils/currency";
 import { getCurrentMonthRange } from "@/lib/utils/date";
@@ -7,12 +8,18 @@ export const dynamic = "force-dynamic";
 
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ household?: string }> }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: membership } = await supabase.from("household_members").select("household_id, display_name, households(name)").eq("auth_user_id", user!.id).eq("is_active", true).order("created_at", { ascending: false }).limit(1).maybeSingle();
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+  if (!user) redirect("/login");
+  const { data: membership } = await supabase.from("household_members").select("household_id, display_name, households(name)").eq("auth_user_id", user.id).eq("is_active", true).order("created_at", { ascending: false }).limit(1).maybeSingle();
   if (!membership) return <EmptyState />;
   const { start, end } = getCurrentMonthRange();
-  const { data: transactions, error: transactionsError } = await supabase.from("transactions").select("amount, transaction_type").eq("household_id", membership.household_id).gte("transaction_date", start).lt("transaction_date", end);
-  const { data: recentTransactions, error: recentError } = await supabase.from("transactions").select("amount, transaction_type, id, categories(name), accounts(name)").eq("household_id", membership.household_id).gte("transaction_date", start).lt("transaction_date", end).order("transaction_date", { ascending: false }).limit(4);
+  const [transactionsResult, recentResult] = await Promise.all([
+    supabase.from("transactions").select("amount, transaction_type").eq("household_id", membership.household_id).gte("transaction_date", start).lt("transaction_date", end),
+    supabase.from("transactions").select("amount, transaction_type, id, categories(name), accounts(name)").eq("household_id", membership.household_id).gte("transaction_date", start).lt("transaction_date", end).order("transaction_date", { ascending: false }).limit(4),
+  ]);
+  const { data: transactions, error: transactionsError } = transactionsResult;
+  const { data: recentTransactions, error: recentError } = recentResult;
   if (transactionsError || recentError) return <QueryError message="Ringkasan belum bisa memuat transaksi. Silakan muat ulang halaman." />;
   const income = (transactions || []).filter((item) => item.transaction_type === "income").reduce((total, item) => total + Number(item.amount), 0);
   const expense = (transactions || []).filter((item) => item.transaction_type === "expense").reduce((total, item) => total + Number(item.amount), 0);
