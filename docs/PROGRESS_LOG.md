@@ -5,6 +5,32 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 00:08 WIB — Increment 2: performance optimization for slow navigation
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Investigated user report of 2-3 second loading state after clicking navigation buttons.
+- Root cause: every authenticated page made 3 sequential Supabase round trips (`getUser()` API validation + `getMembership()` + page-specific data query). The `getUser()` call alone adds ~200-500ms because it validates the access token with Supabase Auth's API.
+- Replaced `supabase.auth.getUser()` with `supabase.auth.getSession()` across all server-side entry points. `getSession()` reads the session from the cookie store without an API call, eliminating that latency.
+- Parallelized the two dashboard transaction queries (`summary` and `recent 4`) with `Promise.all` so they no longer run sequentially after membership lookup.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- If loading is still perceptibly slow, the remaining bottleneck is likely Vercel cold-start or Supabase region latency. Further improvement would require client-side skeleton Suspense boundaries or edge-caching strategy, which is a larger architectural change.
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+
+### Next step
+- Verify the optimized navigation on the production PWA. If still slow, evaluate client-side skeleton Suspense boundaries for the next session.
+
+---
 ## 2026-08-26 21:19 WIB — Increment 2: design system rollout
 
 **Model used**: Kilo (auto/free)
