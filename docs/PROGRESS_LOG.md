@@ -5,6 +5,36 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 00:47 WIB — Increment 2: client-side skeleton Suspense boundaries
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Addressed user feedback that navigation felt slow (2-3 second loading state after clicking buttons).
+- Added skeleton/shimmer CSS and component patterns to `app/globals.css` using the design system's `--color-surface` base tone and a pulse animation.
+- Refactored all authenticated server components to stream data-dependent sections through React `Suspense` boundaries:
+  - `dashboard/page.tsx`: page heading renders immediately; balance hero + summary cards and recent activity each stream independently.
+  - `transaksi/page.tsx`: page heading renders immediately; transaction list streams in.
+  - `transaksi/baru/page.tsx`: page heading renders immediately; transaction form data streams in.
+  - `akun/page.tsx`: page heading renders immediately; account hero + setup streams in.
+  - `profil/page.tsx`: page heading renders immediately; profile info + account setup streams in.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- If perceived loading is still slow on mobile, the remaining bottleneck is likely Vercel cold-start or Supabase region latency. Further improvement would require client-side prefetching or edge caching strategy.
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+
+### Next step
+- Verify the optimized navigation on the production PWA. If still slow, evaluate client-side prefetching on hover/focus for the next session.
+
+---
 ## 2026-08-27 00:08 WIB — Increment 2: performance optimization for slow navigation
 
 **Model used**: Kilo (auto/free)
