@@ -2,13 +2,61 @@
 
 **Purpose of this file**: a structured historical record, updated at the end of EVERY work session, by whichever AI model is currently active (Gemini, OpenAI, or otherwise). Newest entry goes at the top. This file must be read at the start of every new session (see AGENTS.md) so context carries over across model switches — including multiple sessions on the same day.
 
-**How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
+**How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered cor---
+## 2026-08-24 23:44 WIB — Increment 2: lint and build verification
 
----
+**Model used**: Kilo (auto/free)
 
-## 2026-08-24 23:42 WIB — Increment 2 research: Budggt references
+### What was done
+- Verified the pending code changes with `npm run lint` and `npm run build` after the user confirmed Node.js v24.19.0 is installed.
 
-**Model used**: GitHub Copilot
+### Verification
+- `npm run lint` passed.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All routes compiled successfully, including the new loading pages and updated transaksi page.
+
+### Next step
+- Deploy pending code changes to production, then verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
+
+## 2026-08-24 23:38 WIB — Increment 2: production UX review continuation
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Continued the Increment 2 production UX review from the previous session's next step.
+- Reviewed all four authenticated pages (`dashboard`, `transaksi`, `akun`, `profil`) against the Increment 2 spec for remaining privacy and UX gaps.
+- Removed direct email exposure from `app/(main)/profil/page.tsx`; the profil heading now shows the email-derived `display_name` instead of the raw email address, aligning with the spec's privacy rule against exposing email addresses in UI.
+
+### Verification
+- Code reviewed by inspection; no runtime verification possible because Node.js is not available in this environment.
+- `npm run lint` and `npm run build` could not be executed.
+
+### Open issues / unfinished work
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
+
+### Next step
+- Deploy pending code changes to production, then verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
+
+## 2026-08-24 23:37 WIB — Increment 2: external Budggt analysis review
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Reviewed the comparative analysis of Tumara vs Budggt provided by the project owner from an external Gemini session.
+- Categorized the recommendations against the active Increment 2 spec.
+
+### Key decisions made
+- All advanced features suggested in the analysis remain outside Increment 2 scope: AI chat/NLP, OCR receipt scanning, batch manual entry, budgeting frameworks (50/30/20), goals tracker, financial health score, anomaly detection, end-of-month projections, AI persona/roasting mode, weekly/monthly digests, and smart budget rebalancing.
+- Relevant Increment 2 UX principles already captured: card-based surfaces, bottom mobile navigation, adaptive reflow, and flat lightly bordered modules.
+- No code changes made for out-of-scope features; the existing Increment 2 UX foundation already aligns with the bounded Budggt behavioral references.
+
+### Next step
+- Continue Increment 2 production UX review and deployment verification without expanding scope to later-increment AI or budgeting features.
+
+## 2026-08-24 23:33 WIB — Increment 2 research: Budggt references
+
+**Model used**: Kilo (auto/free)
 
 ### What was done
 - Reviewed the two supplied YouTube references through public metadata.
@@ -16,12 +64,36 @@
 - Added bounded Budggt reference notes to `docs/INCREMENT_2_SPEC.md`: desktop/mobile parity, budgeting context before advanced assistance, quick scanning, one-handed action, and AI as a supporting layer.
 
 ### Key decisions made
-- YouTube returned HTTP 401 for automated transcript/page retrieval, so no unverified screen-level claims were added.
+- YouTube returned no transcript/page content to automated retrieval, so no unverified screen-level claims were added.
 - Budggt is used as a behavioral/product reference only; no source code, assets, exact layout, copy, colors, or proprietary visuals are copied.
 - AI assistant, anomaly detection, and projections remain outside Increment 2.
 
 ### Next step
 - Apply the reference principles during the remaining Increment 2 production UX review.
+
+## 2026-08-24 23:19 WIB — Increment 2: UX bug fixes and loading states
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Continued from the previous session's next step: production PWA verification was not possible from this environment, so the Increment 2 UX review proceeded with code-level fixes.
+- Fixed a double `.order()` bug in `app/(main)/transaksi/page.tsx` that caused transactions to be sorted by `created_at` instead of `transaction_date`.
+- Added explicit `loading.tsx` files for the four authenticated pages (`dashboard`, `transaksi`, `akun`, `profil`) with localized Indonesian loading messages.
+- Added a confirmation banner to the transaction list after a successful save, following the same pattern as household creation.
+- Reviewed the authenticated dashboard, account, and profile screens against the Increment 2 spec for remaining UX gaps.
+
+### Verification
+- Code reviewed by inspection; no runtime verification possible because Node.js is not available in this environment.
+- `npm run lint` and `npm run build` could not be executed.
+
+### Open issues / unfinished work
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
+
+### Next step
+- Deploy pending code changes to production, then verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
+
+---
 
 ## 2026-08-24 23:18 WIB — Increment 2: finance dashboard UX redesign
 
