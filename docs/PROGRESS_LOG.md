@@ -2,7 +2,37 @@
 
 **Purpose of this file**: a structured historical record, updated at the end of EVERY work session, by whichever AI model is currently active (Gemini, OpenAI, or otherwise). Newest entry goes at the top. This file must be read at the start of every new session (see AGENTS.md) so context carries over across model switches — including multiple sessions on the same day.
 
-**How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered cor---
+**How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
+
+---
+## 2026-08-26 21:19 WIB — Increment 2: design system rollout
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Read `docs/DESIGN_SYSTEM.md` and applied its tokens to every screen listed in Section 5.
+- Replaced the desktop top navigation with a left sidebar containing the Tumara wordmark, Beranda/Akun/Riwayat/Profil links, a primary "Catat" button, and logout.
+- Replaced the 4-slot mobile bottom navigation with a 5-slot layout matching the design system: Beranda, Akun, central floating "+" FAB for transaction entry, Riwayat, Profil.
+- Updated `app/layout.tsx` to use the Geist font family and added `viewport-fit=cover` for iOS safe-area support.
+- Rewrote `app/globals.css` with the design system color tokens, typography scale, spacing system, card/button/form patterns, sidebar styles, and mobile FAB styles.
+- Applied the new tokens to all existing screens: login, signup, dashboard, transaksi history, transaksi/baru form, akun, profil, HouseholdSetup, AccountSetup, TransactionList, TransactionForm, and loading states.
+- Fixed privacy issue on the profil page: replaced raw email exposure with the email-derived display name.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+
+### Open issues / unfinished work
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
+
+### Next step
+- Verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
+
+---
 ## 2026-08-24 23:44 WIB — Increment 2: lint and build verification
 
 **Model used**: Kilo (auto/free)
