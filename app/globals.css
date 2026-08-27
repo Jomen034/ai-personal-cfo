@@ -114,6 +114,13 @@ a { color: inherit; text-decoration: none; }
 .account-hero strong { display: block; margin-top: 12px; font-size: var(--text-display); letter-spacing: -.05em; font-weight: 700; }
 .account-hint { align-self: end; max-width: 280px; color: #c4d7cb; font-size: .86rem; }
 .account-list { margin-top: 16px; }
+.account-card { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--color-border); background: var(--color-surface); border-radius: 16px; }
+.account-card + .account-card { margin-top: 12px; }
+.account-card strong { display: block; font-size: var(--text-body); font-weight: 700; }
+.account-card p { margin: 4px 0 0; }
+.account-meta { text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: end; }
+.account-detail-dialog { position: relative; width: min(600px, 100%); max-height: min(720px, calc(100vh - 40px)); overflow-y: auto; border: 1px solid var(--color-border); background: var(--color-surface); padding: 34px; box-shadow: 0 20px 60px rgb(33 49 42 / 20%); border-radius: 16px; }
+.account-detail-dialog h2 { font-size: var(--text-heading); margin: 12px 0 24px; }
 
 /* Profile */
 .profile-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
