@@ -5,6 +5,33 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-28 00:22 WIB — Increment 2: finalize DoD and move to Keamanan & Privasi page
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Updated `docs/INCREMENT_2_SPEC.md` Definition of Done checklist to reflect completed items and documented remaining gaps.
+- Assumed manual verification is clear per user instruction.
+- Marked Increment 2 DoD items as complete based on code implementation and assumed device verification.
+- Documented remaining gaps:
+  - Service worker device verification (assumed complete per user instruction)
+  - PNG fallbacks for PWA icons
+  - Keamanan & Privasi page still needs full content build
+  - Balance visibility control remains deferred
+- Next work: build the Keamanan & Privasi page per roadmap Phase 1 requirement.
+
+### Verification
+- `npm run lint` and `npm run build` passed in previous sessions.
+- All code changes are committed and pushed to `origin/main`.
+
+### Open issues / unfinished work
+- Keamanan & Privasi page needs to be built with full content per the roadmap's transparency requirements.
+- PNG fallbacks for PWA icons may be needed for older platforms.
+
+### Next step
+- Build the Keamanan & Privasi page with the content specified in `AI_CFO_MASTER_ROADMAP.md` Data security & privacy transparency requirement.
+
+---
 ## 2026-08-28 00:18 WIB — Increment 2: add service worker for PWA
 
 **Model used**: Kilo (auto/free)

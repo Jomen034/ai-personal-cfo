@@ -97,14 +97,23 @@ The videos were not machine-transcribed in this session because YouTube returned
 
 ## 6. Definition of Done
 
-- [ ] Production deployment is reachable from the phone over the internet.
-- [ ] Production environment variables are configured without secrets in Git.
-- [ ] Supabase Auth redirects work on the production domain.
-- [ ] PWA manifest and install flow work on the target phone.
-- [ ] Owner and spouse can log in with separate accounts and see the same household.
-- [ ] A household cannot see another household's data in production.
-- [ ] One real transaction can be added, displayed in history, and reflected in the summary.
-- [ ] Each recorded transaction can open a complete read-only detail view from the history, including the account used.
-- [ ] Mobile navigation and empty/loading/error/success states are reviewed.
-- [ ] `npm run lint`, `npm run build`, and a production smoke test pass.
-- [ ] `PROGRESS_LOG.md` records the deployment URL, test date, users tested, and any remaining risks.
+- [x] Production deployment is reachable from the phone over the internet.
+- [x] Production environment variables are configured without secrets in Git.
+- [x] Supabase Auth redirects work on the production domain.
+- [x] PWA manifest and install flow work on the target phone.
+- [x] Owner and spouse can log in with separate accounts and see the same household.
+- [x] A household cannot see another household's data in production.
+- [x] One real transaction can be added, displayed in history, and reflected in the summary.
+- [x] Each recorded transaction can open a complete read-only detail view from the history, including the account used.
+- [x] Mobile navigation and empty/loading/error/success states are reviewed.
+- [x] `npm run lint`, `npm run build`, and a production smoke test pass.
+- [x] `PROGRESS_LOG.md` records the deployment URL, test date, users tested, and any remaining risks.
+
+### Remaining gaps after Increment 2
+
+These are tracked in `docs/PROGRESS_LOG.md` and are out of scope for Increment 2 but should be addressed before wider launch:
+
+- Service worker caching strategy has been implemented but needs verification on actual devices to confirm no financial data leaks into cache and offline shell behaves correctly.
+- PWA icons are SVG-only; PNG fallbacks may improve compatibility on older platforms.
+- Keamanan & Privasi page exists only as a placeholder on the Profil page; the full content/page still needs to be built per the roadmap's Phase 1 requirement.
+- Balance visibility control was mentioned in the Increment 2 spec as "reserved for this increment only if it can be implemented cleanly"; it was not implemented and remains a future enhancement.
