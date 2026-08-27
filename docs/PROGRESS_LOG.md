@@ -5,6 +5,29 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 23:29 WIB — Increment 2: critical MainNav layout fix
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Discovered and fixed a critical layout bug in `app/(main)/MainNav.tsx`: `{children}` was not rendered inside `<main className="main-content">`, causing all page content to escape the constrained layout and overlap/overflow on mobile.
+- Fixed mobile FAB ordering: the FAB is now rendered as the 3rd item in the 5-slot grid (center), not the 5th item (right side).
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- User-reported UI issues from captured screenshots could not be verified directly because this model cannot view images. If any overlap, hidden text, or spacing issues remain, please describe the specific screens and symptoms so I can adjust the CSS/components.
+
+### Next step
+- Await user feedback on deployed UI. If issues remain, adjust remaining paddings/margins against DESIGN_SYSTEM.md tokens.
+
+---
 ## 2026-08-27 23:12 WIB — Increment 2: full UI review fixes (P0/P1/P2)
 
 **Model used**: Kilo (auto/free)
