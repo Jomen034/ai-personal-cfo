@@ -6,5 +6,5 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) redirect("/login");
-  return <div className="app-shell"><MainNav />{children}</div>;
+  return <div className="app-shell"><MainNav>{children}</MainNav></div>;
 }
