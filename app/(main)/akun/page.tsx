@@ -1,7 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { ACCOUNT_TYPES } from "@/lib/constants";
-import { AccountSetup } from "@/components/profile/AccountSetup";
 import { AccountList } from "@/app/(main)/akun/AccountList";
 import { Suspense } from "react";
 
@@ -32,7 +30,7 @@ async function AccountsContent({ householdId }: { householdId: string }) {
     return { ...account, dynamic_balance: Math.max(0, dynamicBalance) };
   });
   const totalBalance = accountsWithBalance.reduce((sum, acc) => sum + acc.dynamic_balance, 0);
-  return <><section className="account-hero"><div><span className="eyebrow">Total saldo tercatat</span><strong>{totalBalance.toLocaleString("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 })}</strong></div><WalletHint /></section><section className="content-section"><div className="section-heading"><div><p className="eyebrow">Daftar akun</p><h2>Rekening dan saldo terkini</h2></div></div><AccountList accounts={accountsWithBalance} householdId={householdId} /></section><section className="content-section"><div className="section-heading"><p className="eyebrow">Tambah sumber dana</p><h2>Hubungkan akun secara manual</h2></div><AccountSetup householdId={householdId} accountTypes={ACCOUNT_TYPES} /></section></>;
+  return <><section className="account-hero"><div><span className="eyebrow">Total saldo tercatat</span><strong>{totalBalance.toLocaleString("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 })}</strong></div><WalletHint /></section><section className="content-section"><div className="section-heading"><div><p className="eyebrow">Daftar akun</p><h2>Rekening dan saldo terkini</h2></div></div><AccountList accounts={accountsWithBalance} householdId={householdId} /></section></>;
 }
 
 function WalletHint() { return <p className="muted account-hint">Gunakan nama label saja, tanpa nomor rekening atau data perbankan sensitif.</p>; }

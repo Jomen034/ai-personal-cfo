@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CircleUserRound, House, Plus, WalletCards, History } from "lucide-react";
 
 const links = [
@@ -13,7 +13,16 @@ const links = [
 
 export function MainNav({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+  const handleNavClick = (href: string, active: boolean) => {
+    if (active) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      router.push(href);
+    }
+  };
 
   return (
     <>
@@ -22,9 +31,9 @@ export function MainNav({ children }: { children: React.ReactNode }) {
           <Link href="/dashboard" className="sidebar-brand">tumara<span>.</span></Link>
           <nav className="sidebar-nav">
             {links.map((link) => (
-              <Link key={link.href} href={link.href} className={isActive(link.href) ? "active" : ""}>
+              <button key={link.href} type="button" onClick={() => handleNavClick(link.href, isActive(link.href))} className={isActive(link.href) ? "active" : ""}>
                 <link.icon size={20} />{link.label}
-              </Link>
+              </button>
             ))}
           </nav>
           <div className="sidebar-cta">
@@ -41,11 +50,14 @@ export function MainNav({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <nav className="mobile-nav" aria-label="Navigasi utama">
-        <Link href="/dashboard" className={isActive("/dashboard") ? "active" : ""}><House size={19} />Beranda</Link>
-        <Link href="/akun" className={isActive("/akun") ? "active" : ""}><WalletCards size={19} />Akun</Link>
-        <Link href="/transaksi/baru" className="mobile-fab" aria-label="Catat transaksi"><Plus size={24} /></Link>
-        <Link href="/transaksi" className={isActive("/transaksi") ? "active" : ""}><History size={19} />Riwayat</Link>
-        <Link href="/profil" className={isActive("/profil") ? "active" : ""}><CircleUserRound size={19} />Profil</Link>
+        {links.map((link) => (
+          <button key={link.href} type="button" onClick={() => handleNavClick(link.href, isActive(link.href))} className={isActive(link.href) ? "active" : ""}>
+            <link.icon size={19} />{link.label}
+          </button>
+        ))}
+        <Link href="/transaksi/baru" className="mobile-fab" aria-label="Catat transaksi">
+          <Plus size={24} />
+        </Link>
       </nav>
     </>
   );

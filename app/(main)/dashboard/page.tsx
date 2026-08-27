@@ -7,15 +7,16 @@ import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ household?: string }> }) {
+export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   const user = session?.user;
   if (!user) redirect("/login");
   const { data: membership } = await supabase.from("household_members").select("household_id, display_name, households(name)").eq("auth_user_id", user.id).eq("is_active", true).order("created_at", { ascending: false }).limit(1).maybeSingle();
   if (!membership) return <EmptyState />;
-  const params = await searchParams;
-  return <><div className="page-heading page-header-safe"><div><p className="eyebrow">Ringkasan bulan ini</p><h1>{params.household ? `Household ${params.household} berhasil dibuat.` : `Halo, ${membership.display_name}.`}</h1><p className="muted">{(membership.households as unknown as { name: string } | null)?.name || "Ruang keuanganmu"}</p></div></div><Suspense fallback={<><section className="skeleton-block" /><section className="skeleton-block" /></>}><DashboardBalance householdId={membership.household_id} /></Suspense><Suspense fallback={<><div className="section-heading"><div><p className="eyebrow">Aktivitas terbaru</p><h2>Catatan bulan ini</h2></div><Link href="/transaksi" className="outline-button">Lihat semua</Link></div><div className="skeleton-row"><div><div className="skeleton skeleton-text" style={{width: 120}} /><div className="skeleton skeleton-text short" /></div><div className="skeleton skeleton-text" style={{width: 100}} /></div><div className="skeleton-row"><div><div className="skeleton skeleton-text" style={{width: 140}} /><div className="skeleton skeleton-text short" /></div><div className="skeleton skeleton-text" style={{width: 90}} /></div><div className="skeleton-row"><div><div className="skeleton skeleton-text" style={{width: 100}} /><div className="skeleton skeleton-text short" /></div><div className="skeleton skeleton-text" style={{width: 110}} /></div></>}><DashboardRecent householdId={membership.household_id} /></Suspense></>;
+  const household = membership.households as unknown as { name: string } | null;
+  const householdName = household?.name || "";
+  return <><div className="page-heading page-header-safe"><div><p className="eyebrow">Ringkasan bulan ini</p><p className="muted" style={{fontSize: "var(--text-body)", margin: 0}}>Halo, {membership.display_name}{householdName ? ` · ${householdName}` : ""}</p></div></div><Suspense fallback={<><section className="skeleton-block" /><section className="skeleton-block" /></>}><DashboardBalance householdId={membership.household_id} /></Suspense><Suspense fallback={<><div className="section-heading"><div><p className="eyebrow">Aktivitas terbaru</p><h2>Catatan bulan ini</h2></div><Link href="/transaksi" className="outline-button">Lihat semua</Link></div><div className="skeleton-row"><div><div className="skeleton skeleton-text" style={{width: 120}} /><div className="skeleton skeleton-text short" /></div><div className="skeleton skeleton-text" style={{width: 100}} /></div><div className="skeleton-row"><div><div className="skeleton skeleton-text" style={{width: 140}} /><div className="skeleton skeleton-text short" /></div><div className="skeleton skeleton-text" style={{width: 90}} /></div><div className="skeleton-row"><div><div className="skeleton skeleton-text" style={{width: 100}} /><div className="skeleton skeleton-text short" /></div><div className="skeleton skeleton-text" style={{width: 110}} /></div></>}><DashboardRecent householdId={membership.household_id} /></Suspense></>;
 }
 
 async function DashboardBalance({ householdId }: { householdId: string }) {
@@ -24,7 +25,7 @@ async function DashboardBalance({ householdId }: { householdId: string }) {
   const { data: transactions } = await supabase.from("transactions").select("amount, transaction_type").eq("household_id", householdId).gte("transaction_date", start).lt("transaction_date", end);
   const income = (transactions || []).filter((item) => item.transaction_type === "income").reduce((total, item) => total + Number(item.amount), 0);
   const expense = (transactions || []).filter((item) => item.transaction_type === "expense").reduce((total, item) => total + Number(item.amount), 0);
-  return <><section className="balance-hero"><div><span className="eyebrow">Sisa bulan ini</span><strong>{formatRupiah(income - expense)}</strong><p>Perbandingan dari pemasukan dan pengeluaran yang tercatat.</p></div><Link href="/akun" className="hero-link">Kelola akun →</Link></section><section className="summary-grid"><SummaryCard label="Pemasukan" value={income} tone="income" /><SummaryCard label="Pengeluaran" value={expense} tone="expense" /></section></>;
+  return <><section className="balance-hero"><div><span className="eyebrow">Sisa bulan ini</span><strong>{formatRupiah(income - expense)}</strong></div><Link href="/akun" className="hero-link">Kelola akun →</Link></section><section className="summary-grid"><SummaryCard label="Pemasukan" value={income} tone="income" /><SummaryCard label="Pengeluaran" value={expense} tone="expense" /></section></>;
 }
 
 async function DashboardRecent({ householdId }: { householdId: string }) {

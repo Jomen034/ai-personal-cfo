@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { formatRupiah } from "@/lib/utils/currency";
 import { formatDate } from "@/lib/utils/date";
 import { ACCOUNT_TYPES } from "@/lib/constants";
+import { AccountSetup } from "@/components/profile/AccountSetup";
 
 type Account = {
   id: string;
@@ -32,6 +33,7 @@ export function AccountList({ accounts, householdId }: { accounts: Account[]; ho
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const closeDetail = () => {
     setSelectedAccount(null);
@@ -84,6 +86,21 @@ export function AccountList({ accounts, householdId }: { accounts: Account[]; ho
           </div>
         ))}
       </div>
+
+      <div style={{marginTop: 16}}>
+        <button type="button" className="outline-button" onClick={() => setShowAddForm(true)} style={{width: "100%"}}>+ Tambah Akun</button>
+      </div>
+
+      {showAddForm && (
+        <div className="dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowAddForm(false); }}>
+          <section className="transaction-dialog" role="dialog" aria-modal="true" aria-labelledby="add-account-title">
+            <button autoFocus className="dialog-close" type="button" onClick={() => setShowAddForm(false)} aria-label="Tutup" title="Tutup">×</button>
+            <p className="eyebrow">Tambah akun</p>
+            <h2 id="add-account-title">Hubungkan akun secara manual</h2>
+            <AccountSetup householdId={householdId} accountTypes={ACCOUNT_TYPES} />
+          </section>
+        </div>
+      )}
 
       {selectedAccount && (
         <div className="dialog-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeDetail(); }}>
