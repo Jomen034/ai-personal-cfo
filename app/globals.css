@@ -148,6 +148,7 @@ a { color: inherit; text-decoration: none; }
 /* Inline form grid */
 .inline-form { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; align-items: end; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-stack { display: grid; gap: 16px; }
 
 /* Desktop sidebar */
 .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-background); border-right: 1px solid var(--color-border); display: none; flex-direction: column; justify-content: space-between; padding: 32px 24px; z-index: 30; }
