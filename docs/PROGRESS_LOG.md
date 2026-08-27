@@ -5,6 +5,36 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-28 00:18 WIB — Increment 2: add service worker for PWA
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Added `public/sw.js` service worker with explicit, safe caching strategy per `INCREMENT_2_SPEC.md` Section 3.
+- Caching rules:
+  - Static shell assets (`/`, `/manifest.webmanifest`, `/favicon.ico`) are cached on install.
+  - Navigation requests use network-first with cache fallback.
+  - Static assets (JS, CSS, images) use stale-while-revalidate.
+  - `/api/*` routes and `supabase` hostnames are explicitly excluded from caching so no authenticated responses or financial data are stored.
+- Registered the service worker in `app/layout.tsx` with a load-triggered registration script.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- Service worker caching behavior should be verified on the target phone (install flow, offline shell, and ensuring no financial data leaks into cache).
+- PWA icons are SVG-only; PNG fallbacks may be needed for older platforms.
+- Keamanan & Privasi page still needs to be built (placeholder exists on Profil).
+
+### Next step
+- Verify PWA install flow and service worker behavior on the production PWA. If offline shell or caching issues appear, adjust the service worker strategy.
+
+---
 ## 2026-08-28 00:12 WIB — Increment 2: PWA mobile nav and form fixes
 
 **Model used**: Kilo (auto/free)
