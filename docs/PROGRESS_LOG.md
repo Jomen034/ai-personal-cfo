@@ -5,6 +5,71 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 23:12 WIB — Increment 2: full UI review fixes (P0/P1/P2)
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Executed all items from `docs/UI_REVIEW_NOTES_V2.md` in priority order: P0, then P1, then P2.
+- P0 fixes:
+  - Fixed nav active-state bug by extracting navigation into `app/(main)/MainNav.tsx` client component using `usePathname()` to derive active state from the actual route.
+  - Removed redundant "+ Catat transaksi" buttons from Dashboard and Riwayat pages.
+  - Removed duplicated "Akun/Sumber uang" management UI from Profil; Profil now only shows identity/household info and links out to `/akun`.
+  - Added top safe-area padding `.page-header-safe` with `padding-top: max(1rem, env(safe-area-inset-top))` applied to page headings.
+  - Test data cleanup: ran script for household `Gaudete Fams`; no test transactions found in database.
+- P1 fixes:
+  - Reduced excessive vertical whitespace across all pages: tightened `page-heading` margin-bottom, `main-content` padding, `summary-grid` gap, `section-heading` margin-bottom, and card paddings to follow DESIGN_SYSTEM.md Section 3 spacing scale (4px base, 12px vertical rhythm).
+  - Reduced oversized page headings from display-scale (`clamp(2.2rem, 5vw, 4.5rem)`) to `--text-heading` (20px / 600 weight) so the actual important numbers (balance, totals) become the visual anchor.
+  - Fixed inconsistent placeholder styling in form dropdowns: empty-value select options now render in `--color-text-secondary` instead of bold black.
+  - Fixed transaction list layout shifts: changed `.transaction-row` to CSS Grid (`1fr auto`) so the "Detail" link always stays top-right regardless of note length.
+  - Verified Akun nav icon is already `WalletCards` (no change needed).
+- P2 fixes:
+  - Softened summary card top-border treatment from 4px to 3px for a lighter card treatment per DESIGN_SYSTEM.md Section 4.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- If perceived loading is still slow on mobile, remaining bottleneck is likely Vercel cold-start or Supabase region latency. Further improvement would require client-side prefetching on hover/focus.
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+
+### Next step
+- Verify the compact, stable UI on the production PWA. If spacing or overlap issues persist, adjust remaining component paddings/margins against the DESIGN_SYSTEM.md token scale.
+
+---
+## 2026-08-26 21:19 WIB — Increment 2: design system rollout (retroactive)
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Read `docs/DESIGN_SYSTEM.md` and applied its tokens to every screen listed in Section 5.
+- Replaced the desktop top navigation with a left sidebar containing the Tumara wordmark, Beranda/Akun/Riwayat/Profil links, a primary "Catat" button, and logout.
+- Replaced the 4-slot mobile bottom navigation with a 5-slot layout matching the design system: Beranda, Akun, central floating "+" FAB for transaction entry, Riwayat, Profil.
+- Updated `app/layout.tsx` to use the Geist font family and added `viewport-fit=cover` for iOS safe-area support.
+- Rewrote `app/globals.css` with the design system color tokens, typography scale, spacing system, card/button/form patterns, sidebar styles, and mobile FAB styles.
+- Applied the new tokens to all existing screens: login, signup, dashboard, transaksi history, transaksi/baru form, akun, profil, HouseholdSetup, AccountSetup, TransactionList, TransactionForm, and loading states.
+- Fixed privacy issue on the profil page: replaced raw email exposure with the email-derived display name.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+
+### Open issues / unfinished work
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
+
+### Next step
+- Verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
+
+---
 ## 2026-08-27 23:01 WIB — Increment 2: UI review fixes P0
 
 **Model used**: Kilo (auto/free)
