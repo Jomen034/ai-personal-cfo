@@ -50,14 +50,11 @@ export function MainNav({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <nav className="mobile-nav" aria-label="Navigasi utama">
-        {links.map((link) => (
-          <button key={link.href} type="button" onClick={() => handleNavClick(link.href, isActive(link.href))} className={isActive(link.href) ? "active" : ""}>
-            <link.icon size={19} />{link.label}
-          </button>
-        ))}
-        <Link href="/transaksi/baru" className="mobile-fab" aria-label="Catat transaksi">
-          <Plus size={24} />
-        </Link>
+        <button type="button" onClick={() => handleNavClick("/dashboard", isActive("/dashboard"))} className={isActive("/dashboard") ? "active" : ""}><House size={19} />Beranda</button>
+        <button type="button" onClick={() => handleNavClick("/akun", isActive("/akun"))} className={isActive("/akun") ? "active" : ""}><WalletCards size={19} />Akun</button>
+        <Link href="/transaksi/baru" className="mobile-fab" aria-label="Catat transaksi"><Plus size={24} /></Link>
+        <button type="button" onClick={() => handleNavClick("/transaksi", isActive("/transaksi"))} className={isActive("/transaksi") ? "active" : ""}><History size={19} />Riwayat</button>
+        <button type="button" onClick={() => handleNavClick("/profil", isActive("/profil"))} className={isActive("/profil") ? "active" : ""}><CircleUserRound size={19} />Profil</button>
       </nav>
     </>
   );
