@@ -5,6 +5,35 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 23:38 WIB — Increment 2: upgrade Akun page with dynamic balance and detail modal
+
+**Model used**: Gemini (auto/free)
+
+### What was done
+- Upgraded the Akun page (`app/(main)/akun/page.tsx`) per user request:
+  1. Lists all registered accounts with dynamic balance calculation instead of static `current_balance`.
+  2. Dynamic balance = `current_balance` (initial) + sum(income transactions) - sum(expense transactions) per account.
+  3. Added a "Detail" button for each account that opens a modal showing the account's transaction history.
+- Extracted account list + detail modal into `app/(main)/akun/AccountList.tsx` client component.
+- Simplified `components/profile/AccountSetup.tsx` to only the add-account form (removed duplicated list).
+- Added CSS for `.account-card`, `.account-meta`, and `.account-detail-dialog` in `app/globals.css`.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- Transaction types are currently limited to `income`/`expense`; future transfer/topup/withdrawal types will require balance-calculation updates.
+- User should verify the new Akun UI on the production PWA.
+
+### Next step
+- Await user feedback on the upgraded Akun page. If balance calculation or detail view needs adjustment, iterate on the modal and list layout.
+
+---
 ## 2026-08-27 23:29 WIB — Increment 2: critical MainNav layout fix
 
 **Model used**: Kilo (auto/free)
