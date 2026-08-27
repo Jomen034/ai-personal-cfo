@@ -5,6 +5,61 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 23:01 WIB — Increment 2: UI review fixes P0
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Read `docs/UI_REVIEW_NOTES_V2.md` and fixed all P0 items in priority order.
+- Fixed nav active-state bug: extracted navigation into `app/(main)/MainNav.tsx` client component using `usePathname()` to derive active state from the actual route. Applied `.active` class to both desktop sidebar and mobile bottom nav links.
+- Removed redundant "+ Catat transaksi" buttons from Dashboard (`app/(main)/dashboard/page.tsx`) and Riwayat (`app/(main)/transaksi/page.tsx`). The central mobile FAB and desktop sidebar "Catat" button remain the single entry points.
+- Removed duplicated "Akun/Sumber uang" management UI from Profil (`app/(main)/profil/page.tsx`). Profil now only shows identity/household info and links out to the dedicated Akun page.
+- Added top safe-area padding: `.page-header-safe` class with `padding-top: max(1rem, env(safe-area-inset-top))` applied to page headings on Dashboard, Transaksi, and Profil.
+- Test data cleanup: ran cleanup script for household `Gaudete Fams`. No test transactions found in the database (already clean or RLS-scoped). No data was deleted without confirmation.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- P1 items from UI_REVIEW_NOTES_V2.md remain: excessive vertical whitespace, oversized page headings, inconsistent placeholder styling in form dropdowns, transaction list item layout shifts, and bottom nav icon choice for Akun.
+- Test data cleanup for `Gaudete Fams` returned no results; if test data exists under a different household name, manual SQL cleanup in Supabase SQL Editor is still available.
+
+### Next step
+- Address P1 items from UI_REVIEW_NOTES_V2.md in the next session: spacing/heading-size audit against DESIGN_SYSTEM.md tokens, form placeholder styling, transaction row layout stability, and nav icon swap.
+
+---
+## 2026-08-26 21:19 WIB — Increment 2: design system rollout (retroactive)
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Read `docs/DESIGN_SYSTEM.md` and applied its tokens to every screen listed in Section 5.
+- Replaced the desktop top navigation with a left sidebar containing the Tumara wordmark, Beranda/Akun/Riwayat/Profil links, a primary "Catat" button, and logout.
+- Replaced the 4-slot mobile bottom navigation with a 5-slot layout matching the design system: Beranda, Akun, central floating "+" FAB for transaction entry, Riwayat, Profil.
+- Updated `app/layout.tsx` to use the Geist font family and added `viewport-fit=cover` for iOS safe-area support.
+- Rewrote `app/globals.css` with the design system color tokens, typography scale, spacing system, card/button/form patterns, sidebar styles, and mobile FAB styles.
+- Applied the new tokens to all existing screens: login, signup, dashboard, transaksi history, transaksi/baru form, akun, profil, HouseholdSetup, AccountSetup, TransactionList, TransactionForm, and loading states.
+- Fixed privacy issue on the profil page: replaced raw email exposure with the email-derived display name.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+
+### Open issues / unfinished work
+- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
+- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
+
+### Next step
+- Verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
+
+---
 ## 2026-08-27 00:47 WIB — Increment 2: client-side skeleton Suspense boundaries
 
 **Model used**: Kilo (auto/free)
