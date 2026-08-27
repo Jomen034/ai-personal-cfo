@@ -5,6 +5,35 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-27 23:55 WIB — Increment 2: apply PAGE_LAYOUT_CORRECTIONS.md
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Read `docs/PAGE_LAYOUT_CORRECTIONS.md` and applied all corrections across pages.
+- Implemented scroll-to-top on active nav re-tap: changed sidebar and mobile bottom nav items from `<Link>` to `<button>` with `usePathname()` comparison; if the tapped item is already active, the page scrolls to top instead of reloading.
+- Beranda: replaced giant display heading with a compact single-line greeting at `--text-body` (15px) with household name as subtle subtitle; removed redundant "+ Catat transaksi" button; trimmed hero card explanatory copy; tightened spacing to 12px vertical rhythm.
+- Akun: reordered page so account list appears before the add-form; converted add-account flow into a modal dialog triggered by "+ Tambah Akun" button; account cards show dynamic balance and Detail button opening transaction history modal.
+- Riwayat: removed redundant "+ Catat transaksi" button; added filter chips for Semua/Pemasukan/Pengeluaran plus per-household-member filter when household has >1 member.
+- Profil: kept compact heading and identity cards; removed duplicated "Sumber uang" section (kept single "Kelola akun →" shortcut); added Logout button and "Keamanan & Privasi" section (flagged as coming soon, page not yet built).
+- Catat Transaksi: added `page-header-safe` to heading; made Jumlah input visually dominant with `--text-display` scale via `.amount-field` class; fixed placeholder color consistency in CSS.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- "Keamanan & Privasi" page does not yet exist; Profil shows a placeholder. This should be built when privacy/security settings are implemented.
+- Dynamic balance calculation currently uses only income/expense types; future transfer/topup/withdrawal transaction types will require extending the formula.
+
+### Next step
+- Await user feedback on the deployed pages. If any spacing, overlap, or layout issues remain, adjust paddings/margins against DESIGN_SYSTEM.md tokens.
+
+---
 ## 2026-08-27 23:38 WIB — Increment 2: upgrade Akun page with dynamic balance and detail modal
 
 **Model used**: Gemini (auto/free)
