@@ -18,5 +18,5 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  return <html lang="id" className="h-full antialiased"><body className={`min-h-full ${geist.className}`}>{children}</body></html>;
+  return <html lang="id" className="h-full antialiased"><body className={`min-h-full ${geist.className}`}>{children}<script dangerouslySetInnerHTML={{__html: `if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); }); }`}} /></body></html>;
 }
