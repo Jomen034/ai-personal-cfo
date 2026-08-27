@@ -5,6 +5,32 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-28 00:12 WIB — Increment 2: PWA mobile nav and form fixes
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Fixed mobile bottom nav active state color: added `.mobile-nav button.active { color: var(--color-primary); }` because switching nav items from `<a>` to `<button>` broke the active color selector.
+- Fixed mobile nav item sizing: ensured both `<a>` and `<button>` nav items have consistent `min-height: 44px; min-width: 44px; display: grid; place-items: center;` so touch targets are uniform and accessible.
+- Fixed cramped account name input in the Akun modal form: changed `AccountSetup` from `inline-form` to `form-stack` so the name field has full width and is readable.
+- Moved mobile FAB back to the center of the bottom nav bar by rendering it as the 3rd item in the 5-slot grid, after Beranda and Akun.
+- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 14 routes compiled successfully.
+- Changes pushed to `origin/main` and Vercel deployment was triggered.
+- Production health check returns `{"status":"ok","service":"tumara"}`.
+
+### Open issues / unfinished work
+- User should verify the mobile nav appearance and active state color on the production PWA.
+- Remaining P1/P2 UI refinements from earlier reviews may still need fine-tuning based on live device testing.
+
+### Next step
+- Await user feedback on the deployed PWA. If any nav sizing, active color, or form-field issues remain, adjust CSS selectors and component markup accordingly.
+
+---
 ## 2026-08-27 23:55 WIB — Increment 2: apply PAGE_LAYOUT_CORRECTIONS.md
 
 **Model used**: Kilo (auto/free)
