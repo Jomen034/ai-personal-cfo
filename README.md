@@ -1,44 +1,77 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tumara — AI Personal CFO
+
+**Tumbuh dengan arah.**
+
+Tumara is an AI-powered personal finance app for Indonesian individuals, couples, and families. It helps users record financial activities, track accounts/balances, understand spending behavior, and make better financial decisions — starting with a privacy-first, manual-first tracker and growing into a full AI CFO.
+
+## Tech Stack
+
+- **Frontend**: Next.js 16 (App Router), TypeScript, Tailwind CSS
+- **Backend/BaaS**: Supabase (Postgres + Auth + Realtime + RLS)
+- **Hosting**: Vercel
+- **PWA**: Service worker with safe caching strategy
+
+## Project Structure
+
+```
+app/                      # Next.js App Router
+  (auth)/                 # Login, signup, household setup
+  (main)/                 # Authenticated screens
+    dashboard/            # Ringkasan bulanan
+    transaksi/            # Riwayat + form transaksi baru
+    akun/                 # Kelola akun/saldo
+    profil/               # Profil, invite code, logout
+    keamanan-privasi/     # Trust & transparency page
+components/               # Shared React components
+  auth/                   # Auth forms, household setup
+  profile/                # Account setup
+  transactions/           # Transaction list, form
+lib/                      # Utilities, Supabase clients, constants
+public/                   # Static assets, manifest, service worker
+supabase/                 # Migrations
+docs/                     # Specs, progress log, design system
+```
 
 ## Getting Started
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+1. Clone the repo
+2. Copy `.env.example` to `.env.local` and fill in your Supabase credentials
+3. Install dependencies:
 
-## Getting Started
+```bash
+npm install
+```
 
-First, run the development server:
+4. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # Start development server
+npm run build    # Production build
+npm run lint     # Run ESLint
+npm run start    # Start production server
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+- Deployed automatically to Vercel on push to `main`
+- Production URL: https://ai-personal-cfo-plum.vercel.app
+- Environment variables configured in Vercel dashboard
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `docs/AI_CFO_MASTER_ROADMAP.md` — Full product vision and phase plan
+- `docs/INCREMENT_2_SPEC.md` — Current increment binding contract
+- `docs/DESIGN_SYSTEM.md` — Design tokens and UI conventions
+- `docs/PROGRESS_LOG.md` — Session history and deployment log
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-
->>>>>>> origin/main
+Private — all rights reserved.
