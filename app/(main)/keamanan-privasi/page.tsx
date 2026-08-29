@@ -1,0 +1,10 @@
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+
+export default async function KeamananPrivasiPage() {
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) redirect("/login");
+
+  return <><div className="page-heading page-header-safe"><div><p className="eyebrow">Trust &amp; Transparency</p><h1>Keamanan &amp; Privasi</h1><p className="muted">Kami ingin kamu merasa aman saat mencatat keuangan.</p></div></div><section className="content-section"><div className="section-heading"><p className="eyebrow">Perlindungan data</p><h2>Apa yang dilindungi</h2></div><p className="muted">Data household kamu hanya bisa dibaca oleh kamu dan anggota household yang kamu undang. Di antara household, data sepenuhnya terisolasi dan tidak bisa diakses oleh pengguna lain.</p></section><section className="content-section"><div className="section-heading"><p className="eyebrow">AI &amp; privasi</p><h2>Bagaimana AI memproses catatanmu</h2></div><p className="muted">Jika suatu saat kami menambahkan fitur input berbasis AI, teks/voice/receipt yang kamu kirim hanya akan dikirimkan sesaat ke layanan AI untuk diekstrak menjadi detail transaksi. Data tersebut tidak disimpan secara permanen oleh penyedia AI dan tidak digunakan untuk melatih model umum.</p></section><section className="content-section"><div className="section-heading"><p className="eyebrow">Akses tim</p><h2>Akses tim teknis</h2></div><p className="muted">Secara teknis, tim bisa mengakses data untuk maintenance atau support. Namun kami berkomitmen untuk tidak melihat detail transaksi individual tanpa alasan yang jelas dan dengan konteks pengguna yang bersangkutan.</p></section><section className="content-section"><div className="section-heading"><p className="eyebrow">Batasan</p><h2>Apa yang tidak pernah kami minta</h2></div><p className="muted">Kami tidak meminta nomor rekening lengkap, PIN, atau kredensial perbankan. Nama akun yang kamu masukkan hanyalah label yang kamu buat sendiri, bukan data sensitif bank.</p></section></>;
+}
