@@ -4,73 +4,200 @@
 
 Tumara is an AI-powered personal finance app for Indonesian individuals, couples, and families. It helps users record financial activities, track accounts/balances, understand spending behavior, and make better financial decisions — starting with a privacy-first, manual-first tracker and growing into a full AI CFO.
 
+## Current State
+
+- **Active increment**: Increment 2 — Live PWA + UX Foundation
+- **Binding spec**: `docs/INCREMENT_2_SPEC.md`
+- **Deployed**: https://ai-personal-cfo-plum.vercel.app
+- **Last significant session**: 2026-08-28 — service worker added, Keamanan & Privasi page built, mobile nav/form fixes applied
+
+## Core Principles (non-negotiable)
+
+1. **AI-agnostic**: wrap AI calls behind swappable interfaces; do not hardcode providers
+2. **Free-tools-first**: minimize paid tooling; document exceptions in `PROGRESS_LOG.md`
+3. **Iterative**: build strictly in increment order; do not jump to later phases
+4. **Bahasa Indonesia**: all user-facing text must be natural Bahasa Indonesia
+5. **Privacy**: RLS for household isolation, never expose emails/invite codes/balances in URLs/logs
+6. **No analytics that sends transaction content** to third parties
+7. **Confirm major architectural/product decisions** with the project owner before implementing
+
 ## Tech Stack
 
-- **Frontend**: Next.js 16 (App Router), TypeScript, Tailwind CSS
+- **Frontend**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4
 - **Backend/BaaS**: Supabase (Postgres + Auth + Realtime + RLS)
-- **Hosting**: Vercel
-- **PWA**: Service worker with safe caching strategy
+- **Hosting**: Vercel (auto-deploy on push to `main`)
+- **PWA**: Service worker (`public/sw.js`) with safe caching — excludes `/api/*` and Supabase hostnames
+- **Font**: Geist (via `next/font/google`)
 
-## Project Structure
+## Environment Variables
 
-```
-app/                      # Next.js App Router
-  (auth)/                 # Login, signup, household setup
-  (main)/                 # Authenticated screens
-    dashboard/            # Ringkasan bulanan
-    transaksi/            # Riwayat + form transaksi baru
-    akun/                 # Kelola akun/saldo
-    profil/               # Profil, invite code, logout
-    keamanan-privasi/     # Trust & transparency page
-components/               # Shared React components
-  auth/                   # Auth forms, household setup
-  profile/                # Account setup
-  transactions/           # Transaction list, form
-lib/                      # Utilities, Supabase clients, constants
-public/                   # Static assets, manifest, service worker
-supabase/                 # Migrations
-docs/                     # Specs, progress log, design system
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-## Getting Started
+See `.env.local.example`. Never commit `.env.local` or service-role keys.
 
-1. Clone the repo
-2. Copy `.env.example` to `.env.local` and fill in your Supabase credentials
-3. Install dependencies:
+## Architecture Overview
+
+### Data Model (Increment 1 core)
+- `households` — shared spaces for couples/families
+- `household_members` — membership with role, soft-delete via `is_active`, push prefs
+- `accounts` — wallets with `current_balance` (initial saldo); dynamic balance computed from transactions
+- `categories` — system-default + household-custom categories
+- `transactions` — income/expense only in Increment 1; type field supports future transfer/withdrawal/etc.
+
+### Key Constraints
+- `MAX_HOUSEHOLD_MEMBERS = 2` (enforced in app logic, not DB constraint)
+- Account types: `cash`, `bank_account`, `digital_wallet`, `credit_card` (see `lib/constants.ts`)
+- All financial amounts are `numeric(16,2)` in Postgres
+- RLS policies enforce household isolation on all tables
+
+### Folder Structure
+
+```
+app/
+  layout.tsx                 # Root layout with Geist font + viewport-fit=cover
+  (auth)/
+    login/page.tsx           # Email/password login
+    signup/page.tsx          # Email signup + household creation
+  (main)/
+    layout.tsx               # Auth guard, renders MainNav + children
+    MainNav.tsx              # Client component: desktop sidebar + mobile bottom nav with FAB
+    dashboard/page.tsx       # Ringkasan: greeting, balance hero, income/expense cards, recent tx
+    transaksi/
+      page.tsx               # Transaction history with filter chips
+      baru/page.tsx          # New transaction form
+    akun/
+      page.tsx               # Accounts page: dynamic balance, account cards, detail modal
+      AccountList.tsx        # Client component for account list + add-account modal
+    profil/page.tsx          # Identity, invite code, household info, logout
+    keamanan-privasi/page.tsx # Trust & transparency page
+  manifest.ts                # PWA manifest generator
+  globals.css                # Design system tokens + all component styles
+
+components/
+  auth/AuthForm.tsx          # Shared login/signup form
+  auth/HouseholdSetup.tsx    # Household creation/join flow
+  profile/AccountSetup.tsx   # Add-account form (used inside Akun modal)
+  transactions/TransactionList.tsx  # Transaction rows + detail dialog + filter chips
+  transactions/TransactionForm.tsx  # New transaction form
+
+lib/
+  supabase/
+    server.ts                # Server-side Supabase client (cookie-based)
+    client.ts                # Client-side Supabase client
+  utils/
+    currency.ts              # formatRupiah()
+    date.ts                  # getCurrentMonthRange(), formatDate()
+  constants.ts               # MAX_HOUSEHOLD_MEMBERS, ACCOUNT_TYPES
+
+public/
+  sw.js                      # Service worker: network-first nav, stale-while-revalidate assets, no API/Supabase caching
+  icon-192.svg               # PWA icon
+  icon-512.svg               # PWA icon
+  manifest.webmanifest       # Generated by app/manifest.ts
+
+supabase/migrations/         # SQL migrations
+docs/
+  AI_CFO_MASTER_ROADMAP.md   # Full 8-phase product vision
+  INCREMENT_2_SPEC.md        # Binding contract for current increment
+  DESIGN_SYSTEM.md           # Color, typography, spacing, component tokens
+  UI_REVIEW_NOTES_V2.md      # UX issues and fixes
+  PAGE_LAYOUT_CORRECTIONS.md # Page-by-page layout corrections
+  PROGRESS_LOG.md            # Session history (newest entry at top)
+```
+
+## Design System
+
+See `docs/DESIGN_SYSTEM.md` for the full token spec. Key values:
+
+- **Primary**: `#0F9D6E` (green)
+- **Primary dark**: `#166B53`
+- **Background**: `#FFFFFF`
+- **Surface**: `#F7F9F8`
+- **Text primary**: `#10231C`
+- **Text secondary**: `#5B6B65`
+- **Border**: `#E3E8E6`
+- **Error**: `#D64545`
+- **Font**: Geist
+- **Display**: 32px / **Heading**: 20px / **Body**: 15px / **Caption**: 13px
+
+## Important Patterns
+
+### Server vs Client Components
+- All page components in `app/(main)/` are **Server Components** by default
+- Use `"use client"` only for interactive components (forms, modals, nav)
+- Data fetching happens in Server Components; client components receive data as props
+
+### Authentication
+- Server-side auth check uses `supabase.auth.getSession()` (not `getUser()`)
+- `getSession()` reads from cookies without an API round-trip
+- Auth guard is in `app/(main)/layout.tsx`
+
+### Navigation
+- Desktop: fixed left sidebar (`MainNav.tsx`)
+- Mobile: fixed bottom nav with 5-slot grid, center FAB for `+ Catat transaksi`
+- Active state derived from `usePathname()` in `MainNav.tsx`
+- Re-tapping active nav item scrolls to top instead of reloading
+
+### Forms
+- Transaction form: amount first, type toggle, category, account, date, note
+- Account form: stacked vertical layout in modal
+- All forms preserve input on validation/network errors
+- Indonesian labels and placeholders only
+
+### Indonesian Language Requirement
+All user-facing text must be natural Bahasa Indonesia:
+- Buttons: "Catat", "Simpan", "Tambah akun", "Keluar"
+- Labels: "Jumlah", "Kategori", "Akun", "Tanggal", "Catatan"
+- Errors: "Gagal menambahkan akun", "Tambahkan akun terlebih dahulu"
+- Navigation: "Beranda", "Akun", "Riwayat", "Profil"
+- Do NOT use English jargon like "Income", "Expense", "Submit", "Add"
+
+## Testing
 
 ```bash
-npm install
+npm run lint      # ESLint
+npm run build     # Production build
 ```
 
-4. Run the development server:
-
-```bash
-npm run dev
-```
-
-5. Open [http://localhost:3000](http://localhost:3000)
-
-## Scripts
-
-```bash
-npm run dev      # Start development server
-npm run build    # Production build
-npm run lint     # Run ESLint
-npm run start    # Start production server
-```
+No automated test suite is configured yet. Verification is primarily:
+- Lint/build passing
+- Manual smoke testing on production
+- Device testing for PWA install/auth/transactions
 
 ## Deployment
 
-- Deployed automatically to Vercel on push to `main`
-- Production URL: https://ai-personal-cfo-plum.vercel.app
-- Environment variables configured in Vercel dashboard
+- **Platform**: Vercel
+- **Trigger**: Push to `main` branch
+- **URL**: https://ai-personal-cfo-plum.vercel.app
+- **Env vars**: Set in Vercel dashboard (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+- **Health check**: `GET /api/health` returns `{"status":"ok","service":"tumara"}`
 
-## Documentation
+## Documentation Index
 
-- `docs/AI_CFO_MASTER_ROADMAP.md` — Full product vision and phase plan
-- `docs/INCREMENT_2_SPEC.md` — Current increment binding contract
-- `docs/DESIGN_SYSTEM.md` — Design tokens and UI conventions
-- `docs/PROGRESS_LOG.md` — Session history and deployment log
+| Document | Purpose |
+|----------|---------|
+| `docs/AI_CFO_MASTER_ROADMAP.md` | Full 8-phase product vision, pricing, privacy requirements |
+| `docs/INCREMENT_2_SPEC.md` | **Binding contract** for current scope — read before coding |
+| `docs/DESIGN_SYSTEM.md` | Color, typography, spacing, component conventions |
+| `docs/UI_REVIEW_NOTES_V2.md` | UX issues found in production screenshots |
+| `docs/PAGE_LAYOUT_CORRECTIONS.md` | Page-by-page layout fixes applied |
+| `docs/PROGRESS_LOG.md` | Session history with timestamps, verification, next steps |
+
+## Known Limitations / Out of Scope for Increment 2
+
+- No AI parsing (Phase 2/3)
+- No recurring transactions/bill reminders (Phase 4)
+- No financial health scoring (Phase 5)
+- No goals planning (Phase 6)
+- No recommendation engine (Phase 7)
+- No AI CFO coaching (Phase 8)
+- No WhatsApp bot input
+- No paid-tier gating
+- Balance visibility control not implemented
+- Keamanan & Privasi page built but content is minimal (placeholder-level)
 
 ## License
 
