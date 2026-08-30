@@ -5,6 +5,41 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-31 00:12 WIB — Increment 3: implement rule-based parser and NL input UI
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Implemented the Increment 3 rule-based transaction parser (`lib/ai/rule-based-parser.ts`) with all three categorization layers:
+  - Layer 1 — Merchant Dictionary: exact/fuzzy match against `merchants.name` and `merchants.aliases`
+  - Layer 2 — Keyword Rules: Indonesian keyword matching for 8 common categories
+  - Layer 3 — User Learning: account mapping heuristics by name and type keywords
+- Added `/api/parse-transaction` route exposing the parser to the frontend.
+- Updated `components/transactions/TransactionForm.tsx` with a natural-language input section:
+  - Text field with Enter-to-parse
+  - "Isi" button to trigger parsing
+  - Confirmation card showing extracted amount, merchant, type, date, and confidence label
+  - Confidence labels: "Sangat mirip" (≥0.8), "Kemungkinan cocok" (≥0.6), "Perlu dicek" (<0.6)
+  - Konfirmasi/Batal actions
+- Confirmed no Phase 4+ features were added.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 16 routes compiled successfully (including new `/api/parse-transaction`).
+- Changes committed and pushed to `origin/main`.
+
+### Open issues / unfinished work
+- `merchants` table migration (`0007_increment3_merchants.sql`) is committed but not yet applied to the live Supabase database.
+- Parser confidence thresholds are hardcoded; may need tuning after real usage.
+- User learning from corrections is not yet persisted (needs a `merchant_corrections` or similar table in a future migration).
+
+### Next step
+- Apply migration `0007_increment3_merchants` to live Supabase database.
+- Test the NL input flow end-to-end on production.
+- If accuracy issues appear, refine keyword rules and add more merchants.
+
+---
 ## 2026-08-30 23:55 WIB — Increment 3: preparatory work
 
 **Model used**: Kilo (auto/free)
