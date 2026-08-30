@@ -5,6 +5,33 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-30 23:55 WIB — Increment 3: preparatory work
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Created `docs/INCREMENT_3_SPEC.md` as the binding contract for Increment 3: Natural Language Entry + Categorization Layers 1–3.
+- Scope defined: natural-language input field, merchant dictionary matching, keyword rules, user learning from corrections, confirmation flow with High/Medium/Low confidence display. LLM-based Layer 4 categorization explicitly deferred to Increment 4.
+- Added `supabase/migrations/0007_increment3_merchants.sql` creating the `merchants` table with RLS policies and seeding 20 global Indonesian merchant entries (Indomaret, GoFood, PLN, etc.).
+- Created `lib/ai/parser.interface.ts` with the AI-agnostic `TransactionParser` interface and `ParsedTransaction` type, so future implementations (rule-based v3, LLM-based v4) can swap behind the same contract.
+- Confirmed no Phase 4+ features were added.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All routes compiled successfully.
+- Changes committed and pushed to `origin/main`.
+
+### Open issues / unfinished work
+- Merchants table migration is committed but not yet applied to the live Supabase database.
+- Parser interface is a stub; no implementation yet.
+- No UI changes made for natural-language entry — that belongs to the active Increment 3 implementation phase.
+
+### Next step
+- Apply migration `0007_increment3_merchants` to the live Supabase database when ready to begin Increment 3 implementation.
+- Build the natural-language input UI and rule-based parser per `docs/INCREMENT_3_SPEC.md`.
+
+---
 ## 2026-08-30 23:02 WIB — Increment 2: honest DoD re-verification, log hygiene, and roadmap correction
 
 **Model used**: Kilo (auto/free)
