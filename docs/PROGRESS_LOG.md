@@ -5,6 +5,40 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-31 00:43 WIB — Increment 2/3: UI spacing consistency audit and fixes
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Conducted a systematic audit of all component files and `app/globals.css` for spacing consistency, missing CSS classes, and inline-style usage.
+- Fixed critical missing `.content-section` CSS class that was used across multiple pages but had no spacing definition, causing sections to stack with no vertical rhythm.
+- Fixed skeleton/loading padding mismatch: `.skeleton-row` used `padding: 18px 0` while real `.transaction-row` used `12px 0`, causing a visual jump when data loaded. Unified to `12px 0`.
+- Reduced dialog padding from `34px` to `24px` in `.transaction-dialog` and `.account-detail-dialog` for better mobile fit.
+- Reduced `.detail-amount` margin-bottom from `38px` to `24px` and `.detail-list > div` padding from `18px 0` to `12px 0` to follow 12px vertical rhythm.
+- Reduced `.segmented` margin from `24px 0` to `16px 0` to match rhythm.
+- Added utility CSS classes (`.mt-8`, `.mt-12`, `.mt-16`, `.mt-24`, `.w-full`, `.flex`, `.items-center`, `.gap-8`, `.gap-12`, `.gap-16`, `.text-success`, `.text-error`, `.font-body`, `.font-heading`, `.font-display`) to replace inline styles.
+- Replaced inline styles with utility classes in:
+  - `app/(main)/dashboard/page.tsx` — greeting text size
+  - `components/transactions/TransactionForm.tsx` — NL input section spacing and layout
+  - `app/(main)/akun/AccountList.tsx` — "+ Tambah Akun" button width and margin
+  - `app/(main)/profil/page.tsx` — Keamanan & Privasi link and logout form margins
+- Confirmed no new features were added and no Phase 4+ features were built.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All 16 routes compiled successfully.
+- Changes committed and pushed to `origin/main`.
+
+### Open issues / unfinished work
+- Some inline styles remain where dynamic values are needed (e.g., confidence color in TransactionForm).
+- `.account-row` and `.detail-panel` CSS classes are defined but unused; could be removed in a cleanup pass.
+- `.content-band` class is defined but no longer used after dashboard refactor; could be removed.
+
+### Next step
+- Continue UI polish based on user feedback from production PWA.
+
+---
 ## 2026-08-31 00:37 WIB — Increment 3: confirm migration 0007 applied
 
 **Model used**: Kilo (auto/free)
