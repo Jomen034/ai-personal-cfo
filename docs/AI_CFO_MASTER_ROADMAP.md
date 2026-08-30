@@ -10,6 +10,23 @@
 
 **Core flow**: Accounts → Transactions → Categorization → Financial Intelligence → Goal Planning → Recommendations → AI CFO Coaching
 
+## Deployment & dogfooding practice (applies from Increment 1 onward)
+Every checkpoint that reaches "stable" status (per the current increment spec's Definition of Done) should also be **deployed to the live Vercel URL**, not just committed/pushed — this is a deliberate practice, not a one-off. The project owner and their partner use the live PWA on their own phones as real users after each meaningful checkpoint, which serves two purposes: (1) genuine dogfooding surfaces real UX friction the owner's own review can't catch, and (2) it keeps the "grow with the product" spirit of the Tumara brand literal, not just conceptual. Practical implications:
+- After each checkpoint push (per the current increment spec's git workflow section), also trigger/confirm a Vercel deployment (if using Vercel's git integration, this may already happen automatically on push to `main` — confirm this is configured rather than assuming)
+- Verify the live deployment's environment variables (Supabase URL/key, and later Gemini key) are set in Vercel's project settings, separately from local `.env.local` — these do not sync automatically
+- Confirm PWA installability ("Add to Home Screen") actually works on the live URL on both an Android and iOS phone before considering a checkpoint truly done for dogfooding purposes
+
+
+**Primary reference: Bibit** (PT. Bibit Tumbuh Bersama — note the name coincidence: "Tumbuh Bersama" echoes Tumara's own "Tumbuh + Arah" origin). Bibit is a well-established Indonesian investment app (mutual funds/SBN/stocks) known for making inherently complex financial data (fund fact sheets, expense ratios, risk profiles) feel simple and approachable to first-time users via a Robo-Advisor — a positioning very close to what Tumara aims for with its AI CFO layer (Phase 5–8): reduce complexity for a novice user, not add to it.
+
+**Principles to carry into Tumara's UI (visual/UX inspiration only — do not copy code, assets, or exact layouts):**
+- **Palette**: clean white/green as the primary base (green ties naturally to "growth," consistent with the Tumbuh/grow brand meaning) — light mode is the default and primary experience, not dark mode. Dark mode may exist as an optional user toggle, not the default.
+- **Simplicity over density**: even where underlying data is complex (financial health score breakdown, recommendations, category taxonomy), the default view should show a clean summary — detail belongs behind a tap/expand, not all laid out at once. This matters most for Phase 5 (health score card) and Phase 7 (recommendation cards), which risk feeling like an accountant's report if over-designed.
+- **Trustworthy, not flashy**: avoid heavy animation or aggressive visual effects — the tone should feel calm and credible (handling someone's household finances), similar to how Bibit avoids gimmicky trading-app aesthetics despite covering investment products.
+- **Large, clear numbers as the visual anchor**: balance/totals should be the biggest, most legible element on any given screen — consistent with what nearly every finance app reference reviewed in this project (CatatBareng, Fundy, Budggt, Bibit) does well.
+
+This section guides visual/UX decisions only. It does not override any functional/schema/architecture decision elsewhere in this document.
+
 ---
 
 ## ⚠️ Build strategy note (read before starting Phase 1)
@@ -532,13 +549,16 @@ Each increment ships a usable product state — an AI coding agent should be abl
 | # | Increment | What it covers |
 |---|---|---|
 | 1 | **Core tracker** | Minimal Phase 1 (household, accounts, categories, transactions only — skip assets/debts/investments) + Phase 2 with manual form entry only (no AI yet) + basic dashboard. Already a working expense tracker. |
-| 2 | **Natural language entry** | Full Phase 2 free-text parsing + Categorization Layers 1–3 (Phase 3: merchant dictionary, keyword rules, user learning — no LLM yet) |
-| 3 | **AI categorization** | Categorization Layer 4 (LLM in the loop) + confidence tiers (High/Medium/Low) + confirm/edit UX |
-| 4 | **Recurring & reminders** | Phase 4 recurring detection + bill push notifications (Web Push API) |
-| 5 | **Health scoring** | Phase 5 Financial Health Engine |
-| 6 | **Goal planning** | Phase 6, including Assets/Debts/Investment entities from Phase 1 as needed to support goal types |
-| 7 | **Recommendations** | Phase 7 rule-based priority/recommendation engine |
-| 8 | **AI CFO coaching** | Phase 8 narrative layer — last, since it needs real accumulated data from every prior increment to coach against |
+| 2 | **Live PWA + UX Foundation** | *(inserted after real-world build experience — see `INCREMENT_2_SPEC.md`)* Deploy Increment 1's tracker as a real hosted PWA for genuine dogfooding by the owner and spouse before adding any AI features: production Vercel deployment, PWA install/manifest, safe-area/mobile polish, Bibit-inspired design system rollout, transaction detail view, and the Keamanan & Privasi page. No AI, recurring transactions, goals, or later-phase features. |
+| 3 | **Natural language entry** | Full Phase 2 free-text parsing + Categorization Layers 1–3 (Phase 3: merchant dictionary, keyword rules, user learning — no LLM yet) |
+| 4 | **AI categorization** | Categorization Layer 4 (LLM in the loop) + confidence tiers (High/Medium/Low) + confirm/edit UX |
+| 5 | **Recurring & reminders** | Phase 4 recurring detection + bill push notifications (Web Push API) |
+| 6 | **Health scoring** | Phase 5 Financial Health Engine |
+| 7 | **Goal planning** | Phase 6, including Assets/Debts/Investment entities from Phase 1 as needed to support goal types |
+| 8 | **Recommendations** | Phase 7 rule-based priority/recommendation engine |
+| 9 | **AI CFO coaching** | Phase 8 narrative layer — last, since it needs real accumulated data from every prior increment to coach against |
+
+**Note on numbering**: this table now has 9 rows for 8 product phases because Increment 2 (Live PWA + UX Foundation) is a cross-cutting infrastructure/UX increment, not a new Phase — it was inserted based on real project experience (get a genuinely usable app in front of real users before building AI features) rather than planned from the start. Every subsequent increment number shifted by one to accommodate it. If you're looking for "which increment builds Phase 3's natural language parsing," it's now **Increment 3**, not Increment 2.
 
 *(WhatsApp-bot input and any paid-tier features are explicitly out of scope until revenue justifies them — see Cost & tooling strategy above.)*
 

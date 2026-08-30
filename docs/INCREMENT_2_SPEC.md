@@ -99,21 +99,30 @@ The videos were not machine-transcribed in this session because YouTube returned
 
 - [x] Production deployment is reachable from the phone over the internet.
 - [x] Production environment variables are configured without secrets in Git.
-- [x] Supabase Auth redirects work on the production domain.
-- [x] PWA manifest and install flow work on the target phone.
-- [x] Owner and spouse can log in with separate accounts and see the same household.
-- [x] A household cannot see another household's data in production.
-- [x] One real transaction can be added, displayed in history, and reflected in the summary.
+- [ ] Supabase Auth redirects work on the production domain.
+- [ ] PWA manifest and install flow work on the target phone.
+- [ ] Owner and spouse can log in with separate accounts and see the same household.
+- [ ] A household cannot see another household's data in production.
+- [ ] One real transaction can be added, displayed in history, and reflected in the summary.
 - [x] Each recorded transaction can open a complete read-only detail view from the history, including the account used.
 - [x] Mobile navigation and empty/loading/error/success states are reviewed.
 - [x] `npm run lint`, `npm run build`, and a production smoke test pass.
-- [x] `PROGRESS_LOG.md` records the deployment URL, test date, users tested, and any remaining risks.
+- [ ] `PROGRESS_LOG.md` records the deployment URL, test date, users tested, and any remaining risks.
+
+### Items requiring real-device verification (unchecked until confirmed)
+
+The following items are implemented in code but have **not** been verified on an actual device or with real user accounts in production:
+
+- Supabase Auth redirects on production domain — code is configured, but redirect behavior after login/logout on a real phone has not been tested end-to-end.
+- PWA install flow — manifest and service worker exist, but "Add to Home Screen" has not been tested on a real phone to confirm install prompt, icon, and standalone launch.
+- Two-user household — separate Auth accounts and household isolation work in code/RLS, but have not been validated with two real accounts in production.
+- Real transaction smoke test — the full flow (add → history → summary → detail) has not been executed with a real logged-in user on the production PWA.
+- PROGRESS_LOG.md DoD checklist — this section was added, but it does not yet record specific test dates, user accounts tested, or device types.
 
 ### Remaining gaps after Increment 2
 
-These are tracked in `docs/PROGRESS_LOG.md` and are out of scope for Increment 2 but should be addressed before wider launch:
+These are tracked in `docs/PROGRESS_LOG.md` and should be addressed before wider launch:
 
-- Service worker caching strategy has been implemented but needs verification on actual devices to confirm no financial data leaks into cache and offline shell behaves correctly.
-- PWA icons are SVG-only; PNG fallbacks may improve compatibility on older platforms.
-- Keamanan & Privasi page exists only as a placeholder on the Profil page; the full content/page still needs to be built per the roadmap's Phase 1 requirement.
+- PNG fallbacks for PWA icons (currently SVG-only).
 - Balance visibility control was mentioned in the Increment 2 spec as "reserved for this increment only if it can be implemented cleanly"; it was not implemented and remains a future enhancement.
+- Keamanan & Privasi page content is now built with the 5 required sections, but the "Link out to the full formal Privacy Policy" item currently points to a placeholder — a real Privacy Policy page/link should be added before public launch.

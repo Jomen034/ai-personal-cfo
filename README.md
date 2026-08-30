@@ -199,6 +199,10 @@ No automated test suite is configured yet. Verification is primarily:
 - Balance visibility control not implemented
 - Keamanan & Privasi page built but content is minimal (placeholder-level)
 
+## Known Deviations from Original Specs
+
+- **Household creation/join now uses SECURITY DEFINER database functions** (`create_household`, `join_household_by_invite`, `account_display_name` in `supabase/migrations/0005_auto_display_names.sql`) for atomicity, rather than the plain app-logic inserts originally described in Increment 1 specs. This was a security/atomicity improvement made after initial implementation.
+
 ## License
 
 Private — all rights reserved.

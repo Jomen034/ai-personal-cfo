@@ -44,3 +44,4 @@ next-env.d.ts
 docs/captured/*.png
 docs/captured/*.jpeg
 docs/captured/*.jpg
+docs/captured/*.MP4

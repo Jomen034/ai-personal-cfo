@@ -5,6 +5,37 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-30 23:02 WIB — Increment 2: honest DoD re-verification, log hygiene, and roadmap correction
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- **Task 1 — Honest DoD re-verification**: Re-audited `docs/INCREMENT_2_SPEC.md` Definition of Done against actual verified status, not assumed status.
+  - Unchecked items that require real-device verification but have not been performed: Supabase Auth redirects on production domain, PWA install flow on target phone, two-user household login/isolation test, real-transaction smoke test on production PWA, and complete PROGRESS_LOG.md DoD checklist with test dates/users/devices.
+  - Keamanan & Privasi page content was verified: it exists with real content covering all 5 roadmap sections (what's protected, AI processing, team access, what we never ask for). Added a placeholder "Kebijakan lengkap" section to satisfy the roadmap's requirement to link out to the full Privacy Policy.
+  - PNG fallback icons: confirmed not present (SVG-only). Left as a remaining gap.
+  - Balance visibility control: confirmed not implemented. Left as remaining gap.
+- **Task 2 — PROGRESS_LOG.md hygiene**: Consolidated three near-identical duplicate entries for the "2026-08-26 21:19 WIB — Increment 2: design system rollout" session into a single canonical entry. Added a transparent note in that entry documenting the consolidation.
+- **Task 3 — Iterative Increments numbering**: Verified `docs/AI_CFO_MASTER_ROADMAP.md` already contains the corrected 9-row table with Increment 2 as "Live PWA + UX Foundation" and all subsequent increments shifted by one. No change needed.
+- **Known deviation note**: Added a "Known Deviations from Original Specs" section to `README.md` documenting that household creation/join now uses SECURITY DEFINER database functions (`create_household`, `join_household_by_invite`, `account_display_name` in `supabase/migrations/0005_auto_display_names.sql`) for atomicity, rather than plain app-logic inserts.
+- Confirmed no Phase 3+ features were added during this session.
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed with Next.js 16.3.2 (Turbopack).
+- All routes compiled successfully.
+- Changes committed and pushed to `origin/main`.
+
+### Open issues / unfinished work
+- Items requiring real-device verification remain unchecked in `INCREMENT_2_SPEC.md` DoD.
+- PNG fallback icons for PWA still needed.
+- Full Privacy Policy page/link still needs to be built before public launch.
+- Balance visibility control remains deferred.
+
+### Next step
+- Perform real-device verification of unchecked DoD items (auth redirects, PWA install, two-user testing, transaction smoke test) and update checkboxes to `[x]` only after genuine confirmation.
+
+---
 ## 2026-08-28 00:22 WIB — Increment 2: finalize DoD and move to Keamanan & Privasi page
 
 **Model used**: Kilo (auto/free)
@@ -226,6 +257,7 @@
 - All 14 routes compiled successfully.
 - Changes pushed to `origin/main` and Vercel deployment was triggered.
 
+- (Three duplicate log entries for this session were consolidated into this one on 2026-08-30 during a log-hygiene pass.)
 ### Open issues / unfinished work
 - Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
 - Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
@@ -259,34 +291,6 @@
 
 ### Next step
 - Address P1 items from UI_REVIEW_NOTES_V2.md in the next session: spacing/heading-size audit against DESIGN_SYSTEM.md tokens, form placeholder styling, transaction row layout stability, and nav icon swap.
-
----
-## 2026-08-26 21:19 WIB — Increment 2: design system rollout (retroactive)
-
-**Model used**: Kilo (auto/free)
-
-### What was done
-- Read `docs/DESIGN_SYSTEM.md` and applied its tokens to every screen listed in Section 5.
-- Replaced the desktop top navigation with a left sidebar containing the Tumara wordmark, Beranda/Akun/Riwayat/Profil links, a primary "Catat" button, and logout.
-- Replaced the 4-slot mobile bottom navigation with a 5-slot layout matching the design system: Beranda, Akun, central floating "+" FAB for transaction entry, Riwayat, Profil.
-- Updated `app/layout.tsx` to use the Geist font family and added `viewport-fit=cover` for iOS safe-area support.
-- Rewrote `app/globals.css` with the design system color tokens, typography scale, spacing system, card/button/form patterns, sidebar styles, and mobile FAB styles.
-- Applied the new tokens to all existing screens: login, signup, dashboard, transaksi history, transaksi/baru form, akun, profil, HouseholdSetup, AccountSetup, TransactionList, TransactionForm, and loading states.
-- Fixed privacy issue on the profil page: replaced raw email exposure with the email-derived display name.
-- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
-
-### Verification
-- `npm run lint` passed with no warnings or errors.
-- `npm run build` passed with Next.js 16.3.2 (Turbopack).
-- All 14 routes compiled successfully.
-- Changes pushed to `origin/main` and Vercel deployment was triggered.
-
-### Open issues / unfinished work
-- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
-- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
-
-### Next step
-- Verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
 
 ---
 ## 2026-08-27 00:47 WIB — Increment 2: client-side skeleton Suspense boundaries
@@ -343,34 +347,6 @@
 
 ### Next step
 - Verify the optimized navigation on the production PWA. If still slow, evaluate client-side skeleton Suspense boundaries for the next session.
-
----
-## 2026-08-26 21:19 WIB — Increment 2: design system rollout
-
-**Model used**: Kilo (auto/free)
-
-### What was done
-- Read `docs/DESIGN_SYSTEM.md` and applied its tokens to every screen listed in Section 5.
-- Replaced the desktop top navigation with a left sidebar containing the Tumara wordmark, Beranda/Akun/Riwayat/Profil links, a primary "Catat" button, and logout.
-- Replaced the 4-slot mobile bottom navigation with a 5-slot layout matching the design system: Beranda, Akun, central floating "+" FAB for transaction entry, Riwayat, Profil.
-- Updated `app/layout.tsx` to use the Geist font family and added `viewport-fit=cover` for iOS safe-area support.
-- Rewrote `app/globals.css` with the design system color tokens, typography scale, spacing system, card/button/form patterns, sidebar styles, and mobile FAB styles.
-- Applied the new tokens to all existing screens: login, signup, dashboard, transaksi history, transaksi/baru form, akun, profil, HouseholdSetup, AccountSetup, TransactionList, TransactionForm, and loading states.
-- Fixed privacy issue on the profil page: replaced raw email exposure with the email-derived display name.
-- Confirmed no new features were added and no Phase 4-8 navigation/pages were built.
-
-### Verification
-- `npm run lint` passed with no warnings or errors.
-- `npm run build` passed with Next.js 16.3.2 (Turbopack).
-- All 14 routes compiled successfully.
-- Changes pushed to `origin/main` and Vercel deployment was triggered.
-
-### Open issues / unfinished work
-- Production PWA verification still pending: deployment URL reachability, Supabase Auth redirects, two-user household testing, and real-transaction smoke test.
-- Privacy/balance visibility control remains deferred outside this increment per the previous session decision.
-
-### Next step
-- Verify the redesigned authenticated screens on the production PWA and complete the Increment 2 Definition of Done checklist.
 
 ---
 ## 2026-08-24 23:44 WIB — Increment 2: lint and build verification
