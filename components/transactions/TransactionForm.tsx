@@ -90,9 +90,9 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
         <button type="button" className={type === "income" ? "selected" : ""} onClick={() => setType("income")}>Pemasukan</button>
       </div>
 
-      <div style={{ marginBottom: 16 }}>
+      <div className="mt-16">
         <label className="field-label">Catat dengan bahasa natural</label>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div className="flex items-center gap-8">
           <input
             name="nl_input"
             placeholder="Contoh: makan siang 50k di warung"
@@ -109,20 +109,20 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
           </button>
         </div>
         {parsed && (
-          <div style={{ marginTop: 12, padding: 12, border: "1px solid var(--color-border)", borderRadius: 12, background: "var(--color-background)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <div className="mt-12 p-12" style={{ border: "1px solid var(--color-border)", borderRadius: 12, background: "var(--color-background)" }}>
+            <div className="flex items-center justify-between mb-12">
               <strong>Hasil penguraian</strong>
-              <span style={{ fontSize: ".78rem", fontWeight: 700, color: parsed.confidence >= 0.8 ? "var(--color-success)" : parsed.confidence >= 0.6 ? "#b88a0a" : "var(--color-error)" }}>
+              <span className="font-body" style={{ fontWeight: 700, color: parsed.confidence >= 0.8 ? "var(--color-success)" : parsed.confidence >= 0.6 ? "#b88a0a" : "var(--color-error)" }}>
                 {parsed.confidence >= 0.8 ? "Sangat mirip" : parsed.confidence >= 0.6 ? "Kemungkinan cocok" : "Perlu dicek"}
               </span>
             </div>
-            <div style={{ display: "grid", gap: 4, fontSize: ".88rem" }}>
+            <div className="flex flex-col gap-8 font-body">
               <div>Jumlah: <strong>{parsed.amount.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}</strong></div>
               {parsed.merchant && <div>Merchant: <strong>{parsed.merchant}</strong></div>}
               <div>Jenis: <strong>{parsed.transaction_type === "income" ? "Pemasukan" : "Pengeluaran"}</strong></div>
               <div>Tanggal: <strong>{parsed.transaction_date}</strong></div>
             </div>
-            <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
+            <div className="mt-16 flex gap-8">
               <button type="button" className="primary-button" style={{ flex: 1 }} onClick={() => { setParsed(null); }}>Konfirmasi</button>
               <button type="button" className="outline-button" style={{ flex: 1 }} onClick={() => setParsed(null)}>Batal</button>
             </div>

@@ -62,7 +62,7 @@ a { color: inherit; text-decoration: none; }
 .primary-button:hover { background: #0a7d58; transform: translateY(-2px); }
 .outline-button { border: 1px solid var(--color-primary); color: var(--color-primary); background: transparent; }
 .text-button { color: var(--color-text-secondary); background: transparent; padding: 4px 0; }
-.choice-row, .segmented { display: flex; gap: 8px; margin: 24px 0; }
+.choice-row, .segmented { display: flex; gap: 8px; margin: 16px 0; }
 .choice, .segmented button { border: 1px solid var(--color-border); background: transparent; color: var(--color-text-secondary); border-radius: 12px; }
 .choice.active, .segmented button.selected { background: var(--color-primary); border-color: var(--color-primary); color: white; }
 
@@ -145,6 +145,27 @@ a { color: inherit; text-decoration: none; }
 .chip { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--color-border); background: transparent; color: var(--color-text-secondary); font-size: .78rem; font-weight: 700; cursor: pointer; }
 .chip.active { background: var(--color-primary); border-color: var(--color-primary); color: white; }
 
+/* Utilities */
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.w-full { width: 100%; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.text-success { color: var(--color-success); }
+.text-error { color: var(--color-error); }
+.font-body { font-size: var(--text-body); }
+.font-heading { font-size: var(--text-heading); }
+.font-display { font-size: var(--text-display); }
+
 /* Inline form grid */
 .inline-form { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; align-items: end; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -176,6 +197,10 @@ a { color: inherit; text-decoration: none; }
 .page-header-safe {
   padding-top: max(1rem, env(safe-area-inset-top));
 }
+
+/* Content sections */
+.content-section { margin-top: 24px; }
+.content-section + .content-section { margin-top: 32px; }
 
 /* Responsive */
 @media (max-width: 720px) {
@@ -244,7 +269,7 @@ a { color: inherit; text-decoration: none; }
 .skeleton-row {
   display: flex;
   justify-content: space-between;
-  padding: 18px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--color-border);
 }
 

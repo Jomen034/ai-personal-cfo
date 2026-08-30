@@ -87,8 +87,8 @@ export function AccountList({ accounts, householdId }: { accounts: Account[]; ho
         ))}
       </div>
 
-      <div style={{marginTop: 16}}>
-        <button type="button" className="outline-button" onClick={() => setShowAddForm(true)} style={{width: "100%"}}>+ Tambah Akun</button>
+      <div className="mt-16">
+        <button type="button" className="outline-button w-full" onClick={() => setShowAddForm(true)}>+ Tambah Akun</button>
       </div>
 
       {showAddForm && (
