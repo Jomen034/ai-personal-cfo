@@ -5,6 +5,27 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-08-31 00:37 WIB — Increment 3: confirm migration 0007 applied
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- User confirmed that `supabase/migrations/0007_increment3_merchants.sql` has been executed directly in the Supabase SQL Editor, so the `merchants` table and seeded data are now live in production.
+- Increment 3 is now fully functional end-to-end: parser, API route, NL input UI, and database table are all in place.
+
+### Verification
+- `npm run lint` and `npm run build` passed in previous sessions.
+- Database migration confirmed live by user execution.
+
+### Open issues / unfinished work
+- Parser confidence thresholds may need tuning after real usage.
+- User-learning persistence not yet implemented.
+- Phase 3+ features remain out of scope.
+
+### Next step
+- Test the natural-language input flow on the production PWA and refine parser accuracy based on real inputs.
+
+---
 ## 2026-08-31 00:12 WIB — Increment 3: implement rule-based parser and NL input UI
 
 **Model used**: Kilo (auto/free)
