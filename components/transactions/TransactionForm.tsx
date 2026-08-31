@@ -91,9 +91,10 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       </div>
 
       <div className="mt-16">
-        <label className="field-label">Catat dengan bahasa natural</label>
-        <div className="flex items-center gap-8">
+        <label className="field-label" htmlFor="nl_input">Catat dengan bahasa natural</label>
+        <div className="input-group mt-12">
           <input
+            id="nl_input"
             name="nl_input"
             placeholder="Contoh: makan siang 50k di warung"
             onKeyDown={(e) => {
@@ -104,19 +105,20 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
               }
             }}
           />
-          <button type="button" className="primary-button" disabled={parsing} onClick={(e) => { const input = (e.target as HTMLElement).previousElementSibling?.querySelector("input") as HTMLInputElement; if (input?.value.trim()) parseNaturalLanguage(input.value.trim()); }}>
+          <button type="button" className="primary-button" disabled={parsing} onClick={(e) => { const input = (e.currentTarget.parentElement?.querySelector("input") as HTMLInputElement | null); if (input?.value.trim()) parseNaturalLanguage(input.value.trim()); }}>
             {parsing ? "Mengurai..." : "Isi"}
           </button>
         </div>
+        <small className="field-hint">Ketik transaksi seperti sehari-hari, lalu klik Isi untuk mengisi form otomatis.</small>
         {parsed && (
-          <div className="mt-12 p-12" style={{ border: "1px solid var(--color-border)", borderRadius: 12, background: "var(--color-background)" }}>
+          <div className="parse-result mt-16">
             <div className="flex items-center justify-between mb-12">
               <strong>Hasil penguraian</strong>
-              <span className="font-body" style={{ fontWeight: 700, color: parsed.confidence >= 0.8 ? "var(--color-success)" : parsed.confidence >= 0.6 ? "#b88a0a" : "var(--color-error)" }}>
+              <span className="font-body parse-confidence" data-confidence={parsed.confidence >= 0.8 ? "high" : parsed.confidence >= 0.6 ? "medium" : "low"}>
                 {parsed.confidence >= 0.8 ? "Sangat mirip" : parsed.confidence >= 0.6 ? "Kemungkinan cocok" : "Perlu dicek"}
               </span>
             </div>
-            <div className="flex flex-col gap-8 font-body">
+            <div className="parse-result-list">
               <div>Jumlah: <strong>{parsed.amount.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}</strong></div>
               {parsed.merchant && <div>Merchant: <strong>{parsed.merchant}</strong></div>}
               <div>Jenis: <strong>{parsed.transaction_type === "income" ? "Pemasukan" : "Pengeluaran"}</strong></div>
@@ -130,7 +132,7 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
         )}
       </div>
 
-      <form onSubmit={submit}>
+      <form className="form-section mt-24" onSubmit={submit}>
         <label className="field-label amount-field">Jumlah
           <input name="amount" type="number" min="1" step="1" required placeholder="0" />
         </label>
