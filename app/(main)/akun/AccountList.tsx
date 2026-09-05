@@ -112,7 +112,7 @@ export function AccountList({ accounts, householdId }: { accounts: Account[]; ho
             <div className={`detail-amount ${selectedAccount.dynamic_balance >= 0 ? "income-text" : "expense-text"}`}>
               {formatRupiah(selectedAccount.dynamic_balance)}
             </div>
-            <div className="section-heading" style={{marginBottom: 12}}>
+            <div className="section-heading mb-12">
               <p className="eyebrow">Transaksi</p>
               <span className="muted">{transactions.length} transaksi</span>
             </div>

@@ -37,7 +37,7 @@ export function MainNav({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
           <div className="sidebar-cta">
-            <Link href="/transaksi/baru" className="primary-button" style={{width:"100%",textAlign:"center",display:"block"}}>Catat</Link>
+            <Link href="/transaksi/baru" className="primary-button w-full">Catat</Link>
           </div>
         </div>
         <div className="sidebar-footer">

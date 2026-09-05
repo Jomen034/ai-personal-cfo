@@ -79,7 +79,7 @@ a { color: inherit; text-decoration: none; }
 .muted { color: var(--color-text-secondary); }
 
 /* Cards */
-.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
 .summary-card, .info-panel, .form-panel { padding: 16px; border: 1px solid var(--color-border); background: var(--color-surface); border-radius: 16px; }
 .summary-card span, .summary-card small { display: block; color: var(--color-text-secondary); font-size: .78rem; }
 .summary-card strong { display: block; font-size: var(--text-display); margin: 12px 0 4px; letter-spacing: -.04em; font-weight: 700; }
@@ -87,13 +87,11 @@ a { color: inherit; text-decoration: none; }
 .summary-card.expense { border-top: 3px solid var(--color-error); }
 .summary-card.balance { background: var(--color-primary-dark); color: white; }
 .summary-card.balance span, .summary-card.balance small { color: #c4d7cb; }
-.content-band { margin-top: 24px; padding: 24px 0; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-.content-band h2 { max-width: 510px; font-size: 2rem; line-height: 1.05; letter-spacing: -.04em; }
 .empty-state { max-width: 600px; padding: 20vh 0; }
 .empty-state h1 { font-size: 3rem; letter-spacing: -.05em; }
 .empty-state.compact { padding: 70px 30px; }
 .transaction-list { border-top: 1px solid var(--color-border); }
-.transaction-row, .account-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--color-border); align-items: start; }
+.transaction-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--color-border); align-items: start; }
 .transaction-row > div { min-width: 0; }
 .transaction-row strong, .transaction-row p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .transaction-row p { color: var(--color-text-secondary); font-size: .88rem; margin: 4px 0 0; }
@@ -119,7 +117,7 @@ a { color: inherit; text-decoration: none; }
 .recent-row span { color: var(--color-text-secondary); font-size: .82rem; }
 
 /* Account */
-.account-hero { display: flex; justify-content: space-between; gap: 30px; padding: 24px; margin-bottom: 24px; background: var(--color-primary-dark); color: #f9f7f1; border-radius: 16px; }
+.account-hero { display: flex; justify-content: space-between; gap: 30px; padding: 24px; margin-bottom: 16px; background: var(--color-primary-dark); color: #f9f7f1; border-radius: 16px; }
 .account-hero strong { display: block; margin-top: 12px; font-size: var(--text-display); letter-spacing: -.05em; font-weight: 700; }
 .account-hint { align-self: end; max-width: 280px; color: #c4d7cb; font-size: .86rem; }
 .account-list { margin-top: 16px; }
@@ -129,7 +127,6 @@ a { color: inherit; text-decoration: none; }
 .account-card strong { display: block; font-size: var(--text-body); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .account-card p { margin: 4px 0 0; }
 .account-meta { text-align: right; display: flex; flex-direction: column; gap: 4px; align-items: end; }
-.account-detail-dialog { position: relative; width: min(600px, 100%); max-height: min(720px, calc(100vh - 40px)); overflow-y: auto; border: 1px solid var(--color-border); background: var(--color-surface); padding: 34px; box-shadow: 0 20px 60px rgb(33 49 42 / 20%); border-radius: 16px; }
 .account-detail-dialog h2 { font-size: var(--text-heading); margin: 12px 0 24px; }
 
 /* Profile */
@@ -137,14 +134,13 @@ a { color: inherit; text-decoration: none; }
 .invite-code { font-size: 1.5rem; letter-spacing: .08em; font-weight: 800; color: var(--color-primary); }
 
 /* Transaction dialog */
-.detail-panel { max-width: 720px; border: 1px solid var(--color-border); background: var(--color-surface); padding: 34px; border-radius: 16px; }
-.detail-amount { font-size: var(--text-display); font-weight: 700; letter-spacing: -.05em; margin-bottom: 38px; }
+.detail-amount { font-size: var(--text-display); font-weight: 700; letter-spacing: -.05em; margin-bottom: 24px; }
 .detail-list { margin: 0; }
-.detail-list > div { display: grid; grid-template-columns: 160px 1fr; gap: 20px; padding: 18px 0; border-top: 1px solid var(--color-border); }
+.detail-list > div { display: grid; grid-template-columns: 160px 1fr; gap: 20px; padding: 12px 0; border-top: 1px solid var(--color-border); }
 .detail-list dt { color: var(--color-text-secondary); font-size: .82rem; }
 .detail-list dd { margin: 0; font-weight: 700; }
 .dialog-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgb(33 49 42 / 45%); }
-.transaction-dialog, .account-detail-dialog { position: relative; width: min(600px, 100%); max-height: min(720px, calc(100vh - 40px)); overflow-y: auto; border: 1px solid var(--color-border); background: var(--color-surface); padding: 34px; box-shadow: 0 20px 60px rgb(33 49 42 / 20%); border-radius: 16px; }
+.transaction-dialog, .account-detail-dialog { position: relative; width: min(600px, 100%); max-height: min(720px, calc(100vh - 40px)); overflow-y: auto; border: 1px solid var(--color-border); background: var(--color-surface); padding: 24px; box-shadow: 0 20px 60px rgb(33 49 42 / 20%); border-radius: 16px; }
 .transaction-dialog h2, .account-detail-dialog h2 { font-size: var(--text-heading); margin: 12px 0 24px; }
 .dialog-close { position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border: 1px solid var(--color-border); background: transparent; color: var(--color-text-primary); cursor: pointer; font-size: 1.6rem; line-height: 1; border-radius: 12px; }
 .dialog-close:hover { background: var(--color-background); }
@@ -173,6 +169,9 @@ a { color: inherit; text-decoration: none; }
 .font-body { font-size: var(--text-body); }
 .font-heading { font-size: var(--text-heading); }
 .font-display { font-size: var(--text-display); }
+.flex-1 { flex: 1 1 0%; }
+.logout-button { border-color: var(--color-error); color: var(--color-error); background: transparent; }
+.logout-button:hover { background: #fef2f2; }
 
 /* Inline form grid */
 .inline-form { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; align-items: end; }

@@ -125,8 +125,8 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
               <div>Tanggal: <strong>{parsed.transaction_date}</strong></div>
             </div>
             <div className="mt-16 flex gap-8">
-              <button type="button" className="primary-button" style={{ flex: 1 }} onClick={() => { setParsed(null); }}>Konfirmasi</button>
-              <button type="button" className="outline-button" style={{ flex: 1 }} onClick={() => setParsed(null)}>Batal</button>
+              <button type="button" className="primary-button flex-1" onClick={() => { setParsed(null); }}>Konfirmasi</button>
+              <button type="button" className="outline-button flex-1" onClick={() => setParsed(null)}>Batal</button>
             </div>
           </div>
         )}
