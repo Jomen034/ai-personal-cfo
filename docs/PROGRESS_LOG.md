@@ -5,6 +5,42 @@
 **How to use**: copy the template below for each new entry. Do not delete or edit past entries — this is an append-only historical log. Use a full timestamp (not just date) so multiple sessions on the same day are distinguishable and ordered correctly.
 
 ---
+## 2026-09-05 23:00 WIB — Increment 2: dead CSS cleanup, spacing tweaks, inline-style removal
+
+**Model used**: Kilo (auto/free)
+
+### What was done
+- Removed 3 unused CSS classes from `app/globals.css`: `.content-band`, `.account-row`, `.detail-panel` (zero TSX references).
+- Fixed duplicate dialog selector that was overriding padding: removed the standalone `.account-detail-dialog` rule (line 130) and unified under `.transaction-dialog, .account-detail-dialog` at line 144.
+- Reduced dialog padding from `34px` to `24px` (was intended in prior session but duplicate selector prevented it from taking effect).
+- Reduced `.detail-amount` margin-bottom from `38px` to `24px`.
+- Reduced `.detail-list > div` padding from `18px 0` to `12px 0`.
+- Reduced `.account-hero` margin-bottom from `24px` to `16px` so hero-to-content spacing matches dashboard (`balance-hero` → `summary-grid` = 16px).
+- Added `.summary-grid` margin-top: `16px` so hero card and summary sub-cards breathe.
+- Replaced all remaining user-facing inline styles with CSS classes:
+  - `MainNav.tsx` sidebar Catat button: `.w-full` instead of inline width/display
+  - `AccountList.tsx` detail dialog section-heading: `.mb-12` instead of inline marginBottom
+  - `profil/page.tsx` logout button: `.logout-button` instead of inline border/color
+  - `TransactionForm.tsx` Konfirmasi/Batal buttons: `.flex-1` instead of inline flex
+  - `transaksi/baru/page.tsx` skeleton fallback: `.form-grid` instead of inline grid
+  - `profil/page.tsx` Kelola akun link: `.ghost-link` for consistency with dashboard Lihat semua
+- Added new utility classes: `.flex-1 { flex: 1 1 0%; }`, `.logout-button` with hover state.
+- Confirmed no user-facing inline styles remain in active components (only skeleton loading placeholders retain inline dimensions, which is acceptable).
+
+### Verification
+- `npm run lint` passed with no warnings or errors.
+- `npm run build` passed (Next.js 16.3.2 Turbopack, 16 routes compiled).
+- Changes committed (`43ed80d`) and pushed to `origin/main`.
+
+### Open issues / unfinished work
+- Parser amount-extraction bug (parked, Increment 3).
+- `.account-row`, `.detail-panel`, `.content-band` dead classes removed; no other dead CSS identified.
+- Skeleton loading placeholders still use inline width/height styles — low priority, not user-facing.
+
+### Next step
+- Await user direction. Open options: continue Increment 2 polish, plan next increment, or begin Increment 4.
+
+---
 ## 2026-09-01 00:15 WIB — Increment 2: text overflow, NL input overlap, ghost link
 
 **Model used**: Kilo (auto/free)
