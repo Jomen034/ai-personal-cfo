@@ -20,22 +20,52 @@ const GEMINI_MODEL = "gemini-flash-latest";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 type GeminiResponse = {
-  candidates?: { content: { parts: { text: string }[] } }[];
-  error?: { message: string };
+  candidates?: { content: { parts: Array<{ text: string; thoughtSignature?: string }> } }[];
 };
 
-function extractJson(text: string): ParsedTransaction | null {
-  const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  const candidate = fence ? fence[1].trim() : text.trim();
+interface GeminiParsed {
+  type: "income" | "expense";
+  amount: number;
+  category: string;
+  account_name: string | null;
+  description: string;
+}
+
+function extractJson(text: string): GeminiParsed | null {
+  const trimmed = text.trim();
+  const fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
+  const candidate = fence ? fence[1].trim() : trimmed;
+
   const start = candidate.indexOf("{");
   const end = candidate.lastIndexOf("}");
   if (start === -1 || end === -1) return null;
+
   const jsonStr = candidate.slice(start, end + 1);
   try {
-    return JSON.parse(jsonStr) as ParsedTransaction;
+    return JSON.parse(jsonStr) as GeminiParsed;
   } catch {
     return null;
   }
+}
+
+function todayISO(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function bestMatch(name: string, candidates: Array<{ id: string; name: string }>): { id: string; score: number } | null {
+  const lower = name.toLowerCase();
+  let best: { id: string; score: number } | null = null;
+
+  for (const c of candidates) {
+    const cl = c.name.toLowerCase();
+    let score = 0;
+    if (cl === lower) score = 1.0;
+    else if (cl.includes(lower) || lower.includes(cl)) score = 0.85;
+    else if (cl.split(/\s+/).some((w) => lower.includes(w))) score = 0.6;
+    if (!best || score > best.score) best = { id: c.id, score };
+  }
+
+  return best && best.score >= 0.6 ? best : null;
 }
 
 export class GeminiParser implements TransactionParser {
@@ -51,43 +81,32 @@ export class GeminiParser implements TransactionParser {
       supabase.from("accounts").select("id, name, account_type").eq("household_id", householdId),
     ]);
 
-    const categoryOptions = (categories || [])
-      .map((c) => `- ${c.id}: ${c.name} (${c.type})`)
-      .join("\n");
+    const categoryList = (categories || []).map((c) => c.name);
+    const accountList = (accounts || []).map((a) => a.name);
 
-    const accountOptions = (accounts || [])
-      .map((a) => `- ${a.id}: ${a.name} (${a.account_type})`)
-      .join("\n");
+    const prompt = `You are the Natural Language Financial Parser for 'Tumara AI Personal CFO'.
+Extract financial transaction details from the user's natural language input into a strict JSON format.
 
-    const prompt = `Kamu adalah parser transaksi keuangan untuk aplikasi Tumara (AI Personal CFO). Ubah input bahasa alami pengguna menjadi JSON transaksi yang terstruktur. Hanya balas JSON, tanpa penjelasan lain.
+Available User Accounts: ${JSON.stringify(accountList)}
+Available Categories: ${JSON.stringify(categoryList)}
 
-Kategori yang tersedia:\n${categoryOptions || "(belum ada kategori)"}
+Rules:
+1. Identify if it's 'expense' or 'income'. Default to 'expense' unless explicitly 'terima', 'dapat', or 'pemasukan'.
+2. Extract the exact numerical amount (convert '50k' -> 50000, '1.2jt' -> 1200000).
+3. Match 'account_name' to the closest available account provided above. If no match, return null.
+4. Match 'category' to the most relevant available category.
+5. Clean the remaining context as 'description'.
 
-Akun yang tersedia:\n${accountOptions || "(belum ada akun)"}
-
-Aturan:
-1. transaction_type: "income" atau "expense"
-2. amount: angka bulat tanpa pemisah ribuan (contoh: 45500, bukan 45.500)
-3. merchant: nama toko/merchant jika terdeteksi, abaikan jika tidak ada
-4. category_id: pilih id kategori yang PALING COCOK dari daftar di atas
-5. account_id: pilih id akun yang PALING COCOK dari daftar di atas (jika disebutkan)
-6. transaction_date: format YYYY-MM-DD, gunakan hari ini jika tidak disebutkan
-7. confidence: 0.0 sampai 1.0, seberapa yakin kamu terhadap hasilnya
-8. raw_input: salinan input asli pengguna
-
-Input pengguna: "${input}"
-
-Balas hanya JSON dengan format:
+Return ONLY valid JSON:
 {
-  "transaction_type": "income" | "expense",
-  "amount": 0,
-  "merchant": "",
-  "category_id": "",
-  "account_id": "",
-  "transaction_date": "",
-  "confidence": 0.0,
-  "raw_input": ""
-}`;
+  "type": "expense" | "income",
+  "amount": number,
+  "category": string,
+  "account_name": string | null,
+  "description": string
+}
+
+Input: "${input}"`;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
@@ -130,7 +149,21 @@ Balas hanya JSON dengan format:
         throw new Error("Format respons AI tidak valid");
       }
 
-      return parsed;
+      const categoryMatch = bestMatch(parsed.category, (categories || []).map((c) => ({ id: c.id, name: c.name })));
+      const accountMatch = parsed.account_name
+        ? bestMatch(parsed.account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
+        : null;
+
+      return {
+        transaction_type: parsed.type,
+        amount: Math.round(parsed.amount),
+        merchant: parsed.description || undefined,
+        category_id: categoryMatch?.id,
+        account_id: accountMatch?.id,
+        transaction_date: todayISO(),
+        confidence: categoryMatch && accountMatch ? 0.9 : categoryMatch ? 0.75 : 0.5,
+        raw_input: input,
+      };
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") {
         throw new Error("Waktu tunggu AI habis. Coba lagi.");
