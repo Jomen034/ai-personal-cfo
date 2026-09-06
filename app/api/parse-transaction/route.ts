@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { GeminiParser } from "@/lib/ai/gemini-parser";
 
+export async function GET() {
+  return NextResponse.json({ status: "ok" });
+}
+
 export async function POST(request: Request) {
   try {
     const { input, household_id } = await request.json();

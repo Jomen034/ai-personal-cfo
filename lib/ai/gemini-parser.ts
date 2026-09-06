@@ -1,19 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-
-export interface ParsedTransaction {
-  transaction_type: "income" | "expense";
-  amount: number;
-  merchant?: string;
-  category_id?: string;
-  account_id?: string;
-  transaction_date: string;
-  confidence: number;
-  raw_input: string;
-}
-
-export interface TransactionParser {
-  parse(input: string, householdId: string): Promise<ParsedTransaction>;
-}
+import { ParsedTransaction, TransactionParser } from "@/lib/ai/parser.interface";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = "gemini-flash-latest";
@@ -24,28 +10,38 @@ type GeminiResponse = {
 };
 
 interface GeminiParsed {
-  type: "income" | "expense";
+  type: "income" | "expense" | "transfer";
   amount: number;
   category: string;
   account_name: string | null;
+  destination_account_name: string | null;
   description: string;
 }
 
 function extractJson(text: string): GeminiParsed | null {
   const trimmed = text.trim();
+
   const fence = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/);
-  const candidate = fence ? fence[1].trim() : trimmed;
-
-  const start = candidate.indexOf("{");
-  const end = candidate.lastIndexOf("}");
-  if (start === -1 || end === -1) return null;
-
-  const jsonStr = candidate.slice(start, end + 1);
-  try {
-    return JSON.parse(jsonStr) as GeminiParsed;
-  } catch {
-    return null;
+  if (fence) {
+    try {
+      return JSON.parse(fence[1].trim()) as GeminiParsed;
+    } catch {
+      // fall through
+    }
   }
+
+  const start = trimmed.indexOf("{");
+  const end = trimmed.lastIndexOf("}");
+  if (start !== -1 && end !== -1 && end > start) {
+    const jsonStr = trimmed.slice(start, end + 1);
+    try {
+      return JSON.parse(jsonStr) as GeminiParsed;
+    } catch {
+      // fall through
+    }
+  }
+
+  return null;
 }
 
 function todayISO(): string {
@@ -77,7 +73,7 @@ export class GeminiParser implements TransactionParser {
     const supabase = await createClient();
 
     const [{ data: categories }, { data: accounts }] = await Promise.all([
-      supabase.from("categories").select("id, name, type").eq("household_id", householdId),
+      supabase.from("categories").select("id, name, type").is("household_id", null),
       supabase.from("accounts").select("id, name, account_type").eq("household_id", householdId),
     ]);
 
@@ -91,18 +87,20 @@ Available User Accounts: ${JSON.stringify(accountList)}
 Available Categories: ${JSON.stringify(categoryList)}
 
 Rules:
-1. Identify if it's 'expense' or 'income'. Default to 'expense' unless explicitly 'terima', 'dapat', or 'pemasukan'.
+1. Identify if it's 'expense', 'income', or 'transfer'. Use 'transfer' ONLY if the input explicitly mentions moving money between accounts (keywords: 'transfer', 'tf', 'kirim ke', 'pindah ke', 'to [account]', 'ke [account]'). Default to 'expense' unless explicitly 'terima', 'dapat', or 'pemasukan'.
 2. Extract the exact numerical amount (convert '50k' -> 50000, '1.2jt' -> 1200000).
-3. Match 'account_name' to the closest available account provided above. If no match, return null.
-4. Match 'category' to the most relevant available category.
-5. Clean the remaining context as 'description'.
+3. If type is 'transfer', set account_name to the SOURCE account and destination_account_name to the TARGET account. Both must match available accounts. Category should be 'Transfer'.
+4. If type is 'expense' or 'income', match 'account_name' to the closest available account. If no match, return null.
+5. Match 'category' to the most relevant available category.
+6. Clean the remaining context as 'description'.
 
 Return ONLY valid JSON:
 {
-  "type": "expense" | "income",
+  "type": "expense" | "income" | "transfer",
   "amount": number,
   "category": string,
   "account_name": string | null,
+  "destination_account_name": string | null,
   "description": string
 }
 
@@ -153,15 +151,20 @@ Input: "${input}"`;
       const accountMatch = parsed.account_name
         ? bestMatch(parsed.account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
         : null;
+      const destinationAccountMatch = parsed.destination_account_name
+        ? bestMatch(parsed.destination_account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
+        : null;
 
       return {
-        transaction_type: parsed.type,
+        transaction_type: parsed.type === "transfer" ? "expense" : parsed.type,
         amount: Math.round(parsed.amount),
         merchant: parsed.description || undefined,
-        category_id: categoryMatch?.id,
+        category_id: parsed.type === "transfer" ? undefined : categoryMatch?.id,
         account_id: accountMatch?.id,
+        destination_account_id: destinationAccountMatch?.id,
+        transfer_type: parsed.type === "transfer" ? "internal" : null,
         transaction_date: todayISO(),
-        confidence: categoryMatch && accountMatch ? 0.9 : categoryMatch ? 0.75 : 0.5,
+        confidence: parsed.type === "transfer" && accountMatch && destinationAccountMatch ? 0.9 : categoryMatch && accountMatch ? 0.9 : categoryMatch ? 0.75 : 0.5,
         raw_input: input,
       };
     } catch (err) {

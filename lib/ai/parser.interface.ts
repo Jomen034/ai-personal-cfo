@@ -4,6 +4,8 @@ export interface ParsedTransaction {
   merchant?: string;
   category_id?: string;
   account_id?: string;
+  destination_account_id?: string;
+  transfer_type?: "internal" | "external" | null;
   transaction_date: string;
   confidence: number;
   raw_input: string;
