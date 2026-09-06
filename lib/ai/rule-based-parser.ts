@@ -43,22 +43,31 @@ const ACCOUNT_TYPE_KEYWORDS: Record<string, string[]> = {
 };
 
 function extractAmount(input: string): number | null {
-  const patterns = [
-    /(?:Rp\s*)?(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)/,
-    /(\d+)\s*k(?:\s|$)/i,
-    /(\d+)\s*jt(?:\s|$)/i,
-    /(\d+)\s*ribu(?:\s|$)/i,
-  ];
+  const lower = input.toLowerCase();
 
-  for (const pattern of patterns) {
-    const match = input.match(pattern);
-    if (match) {
-      let amount = parseFloat(match[1].replace(/[.,]/g, ""));
-      if (amount < 1000 && /\bk\b/i.test(match[0])) amount *= 1000;
-      if (amount < 1000 && /\bjt\b/i.test(match[0])) amount *= 1000000;
-      if (amount < 1000 && /\bribu\b/i.test(match[0])) amount *= 1000;
-      if (Number.isFinite(amount) && amount > 0) return Math.round(amount);
-    }
+  const suffixMap: Record<string, number> = {
+    k: 1000,
+    rb: 1000,
+    ribu: 1000,
+    jt: 1000000,
+    juta: 1000000,
+  };
+
+  const suffixPattern = /(\d+(?:[.,]\d{3})*)\s*(k|rb|ribu|jt|juta)(?:\s|$)/i;
+  const suffixMatch = lower.match(suffixPattern);
+  if (suffixMatch) {
+    const raw = suffixMatch[1].replace(/[.,]/g, "");
+    const suffix = suffixMatch[2].toLowerCase();
+    const amount = parseFloat(raw) * (suffixMap[suffix] || 1);
+    if (Number.isFinite(amount) && amount > 0) return Math.round(amount);
+  }
+
+  const plainPattern = /(?:Rp\s*)?(\d{1,3}(?:[.,]\d{3})+|\d+)(?:\s|$)/;
+  const plainMatch = input.match(plainPattern);
+  if (plainMatch) {
+    const raw = plainMatch[1].replace(/[.,]/g, "");
+    const amount = parseFloat(raw);
+    if (Number.isFinite(amount) && amount > 0) return Math.round(amount);
   }
 
   return null;

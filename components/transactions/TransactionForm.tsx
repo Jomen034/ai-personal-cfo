@@ -15,6 +15,8 @@ type ParsedResult = {
   transaction_date: string;
   confidence: number;
   raw_input: string;
+  category_name?: string;
+  account_name?: string;
 };
 
 export function TransactionForm({ memberId, householdId, accounts, categories }: { memberId: string; householdId: string; accounts: Option[]; categories: Option[] }) {
@@ -38,13 +40,34 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Gagal memproses");
-      setParsed(data);
+      const enriched = {
+        ...data,
+        category_name: categories.find((c) => c.id === data.category_id)?.name,
+        account_name: accounts.find((a) => a.id === data.account_id)?.name,
+      } as ParsedResult;
+      setParsed(enriched);
       if (data.transaction_type) setType(data.transaction_type);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal memproses input");
     } finally {
       setParsing(false);
     }
+  }
+
+  function applyParsedToForm() {
+    if (!parsed) return;
+    const form = document.getElementById("transaction-form") as HTMLFormElement | null;
+    if (!form) return;
+    const amountInput = form.querySelector('input[name="amount"]') as HTMLInputElement | null;
+    const categorySelect = form.querySelector('select[name="category_id"]') as HTMLSelectElement | null;
+    const accountSelect = form.querySelector('select[name="account_id"]') as HTMLSelectElement | null;
+    const dateInput = form.querySelector('input[name="transaction_date"]') as HTMLInputElement | null;
+    if (amountInput && parsed.amount) amountInput.value = String(parsed.amount);
+    if (categorySelect && parsed.category_id) categorySelect.value = parsed.category_id;
+    if (accountSelect && parsed.account_id) accountSelect.value = parsed.account_id;
+    if (dateInput && parsed.transaction_date) dateInput.value = parsed.transaction_date;
+    setParsed(null);
+    setType(parsed.transaction_type);
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -121,18 +144,21 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
             <div className="parse-result-list">
               <div>Jumlah: <strong>{parsed.amount.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}</strong></div>
               {parsed.merchant && <div>Merchant: <strong>{parsed.merchant}</strong></div>}
+              {parsed.category_name && <div>Kategori: <strong>{parsed.category_name}</strong></div>}
+              {parsed.account_name && <div>Akun: <strong>{parsed.account_name}</strong></div>}
               <div>Jenis: <strong>{parsed.transaction_type === "income" ? "Pemasukan" : "Pengeluaran"}</strong></div>
               <div>Tanggal: <strong>{parsed.transaction_date}</strong></div>
             </div>
-            <div className="mt-16 flex gap-8">
+            <div className="mt-16 flex parse-result-actions">
               <button type="button" className="primary-button flex-1" onClick={() => { setParsed(null); }}>Konfirmasi</button>
+              <button type="button" className="outline-button flex-1" onClick={applyParsedToForm}>Perbaiki</button>
               <button type="button" className="outline-button flex-1" onClick={() => setParsed(null)}>Batal</button>
             </div>
           </div>
         )}
       </div>
 
-      <form className="form-section mt-24" onSubmit={submit}>
+      <form id="transaction-form" className="form-section mt-24" onSubmit={submit}>
         <label className="field-label amount-field">Jumlah
           <input name="amount" type="number" min="1" step="1" required placeholder="0" />
         </label>
