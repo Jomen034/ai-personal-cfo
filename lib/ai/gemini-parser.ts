@@ -48,16 +48,21 @@ function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+function normalizeName(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
 function bestMatch(name: string, candidates: Array<{ id: string; name: string }>): { id: string; score: number } | null {
-  const lower = name.toLowerCase();
+  if (!name || !candidates.length) return null;
+  const lower = normalizeName(name);
   let best: { id: string; score: number } | null = null;
 
   for (const c of candidates) {
-    const cl = c.name.toLowerCase();
+    const cl = normalizeName(c.name);
     let score = 0;
     if (cl === lower) score = 1.0;
     else if (cl.includes(lower) || lower.includes(cl)) score = 0.85;
-    else if (cl.split(/\s+/).some((w) => lower.includes(w))) score = 0.6;
+    else if (cl.split(" ").some((w) => w.length > 2 && lower.includes(w))) score = 0.6;
     if (!best || score > best.score) best = { id: c.id, score };
   }
 
@@ -143,12 +148,28 @@ Return ONLY JSON:
       const categoryMatch = parsed.category
         ? bestMatch(parsed.category, (categories || []).map((c) => ({ id: c.id, name: c.name })))
         : null;
-      const accountMatch = parsed.account_name
+      let accountMatch = parsed.account_name
         ? bestMatch(parsed.account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
         : null;
-      const destinationAccountMatch = parsed.destination_account_name
+      let destinationAccountMatch = parsed.destination_account_name
         ? bestMatch(parsed.destination_account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
         : null;
+
+      if (!accountMatch && accounts && accounts.length > 0) {
+        const fallback = bestMatch(input, (accounts || []).map((a) => ({ id: a.id, name: a.name })));
+        if (fallback) {
+          console.log("[GeminiParser] fallback account match from raw input:", fallback);
+          accountMatch = fallback;
+        }
+      }
+
+      if (!destinationAccountMatch && accounts && accounts.length > 0) {
+        const fallback = bestMatch(input, (accounts || []).map((a) => ({ id: a.id, name: a.name })));
+        if (fallback) {
+          console.log("[GeminiParser] fallback destination account match from raw input:", fallback);
+          destinationAccountMatch = fallback;
+        }
+      }
 
       console.log("[GeminiParser] accounts:", JSON.stringify(accounts));
       console.log("[GeminiParser] parsed.account_name:", parsed.account_name, "=> accountMatch:", accountMatch);
