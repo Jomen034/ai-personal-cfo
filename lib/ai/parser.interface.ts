@@ -1,5 +1,5 @@
 export interface ParsedTransaction {
-  transaction_type: "income" | "expense";
+  transaction_type: "income" | "expense" | "transfer";
   amount: number;
   merchant?: string;
   category_id?: string;

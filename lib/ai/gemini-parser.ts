@@ -151,7 +151,7 @@ Return ONLY JSON:
         : null;
 
       return {
-        transaction_type: parsed.type === "transfer" ? "expense" : parsed.type,
+        transaction_type: parsed.type,
         amount: Math.round(parsed.amount),
         merchant: parsed.description || undefined,
         category_id: parsed.type === "transfer" ? undefined : categoryMatch?.id,

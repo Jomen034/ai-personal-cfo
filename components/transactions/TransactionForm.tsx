@@ -7,16 +7,19 @@ import { createClient } from "@/lib/supabase/client";
 type Option = { id: string; name: string; type?: string; account_type?: string };
 
 type ParsedResult = {
-  transaction_type: "income" | "expense";
+  transaction_type: "income" | "expense" | "transfer";
   amount: number;
   merchant?: string;
   category_id?: string;
   account_id?: string;
+  destination_account_id?: string;
+  transfer_type?: "internal" | "external" | null;
   transaction_date: string;
   confidence: number;
   raw_input: string;
   category_name?: string;
   account_name?: string;
+  destination_account_name?: string;
 };
 
 export function TransactionForm({ memberId, householdId, accounts, categories }: { memberId: string; householdId: string; accounts: Option[]; categories: Option[] }) {
@@ -42,11 +45,16 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       if (!res.ok) throw new Error(data.error || "Gagal memproses");
       const enriched = {
         ...data,
-        category_name: categories.find((c) => c.id === data.category_id)?.name,
-        account_name: accounts.find((a) => a.id === data.account_id)?.name,
+        category_name: data.category_id ? categories.find((c) => c.id === data.category_id)?.name : undefined,
+        account_name: data.account_id ? accounts.find((a) => a.id === data.account_id)?.name : undefined,
+        destination_account_name: data.destination_account_id ? accounts.find((a) => a.id === data.destination_account_id)?.name : undefined,
       } as ParsedResult;
       setParsed(enriched);
-      if (data.transaction_type) setType(data.transaction_type);
+      if (data.transaction_type === "transfer") {
+        setType("expense");
+      } else if (data.transaction_type) {
+        setType(data.transaction_type);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal memproses input");
     } finally {
@@ -66,8 +74,7 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
     if (categorySelect && parsed.category_id) categorySelect.value = parsed.category_id;
     if (accountSelect && parsed.account_id) accountSelect.value = parsed.account_id;
     if (dateInput && parsed.transaction_date) dateInput.value = parsed.transaction_date;
-    setParsed(null);
-    setType(parsed.transaction_type);
+    setType(parsed.transaction_type === "transfer" ? "expense" : parsed.transaction_type);
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -93,6 +100,14 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       payload.raw_input = parsed.raw_input;
       payload.parsed_confidence = parsed.confidence;
       payload.reviewed_flag = true;
+    }
+
+    if (parsed?.transfer_type) {
+      payload.transaction_type = "expense";
+      payload.transfer_type = parsed.transfer_type;
+      if (parsed.destination_account_id) {
+        payload.destination_account_id = parsed.destination_account_id;
+      }
     }
 
     const { error: insertError } = await supabase.from("transactions").insert(payload);
@@ -143,10 +158,11 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
             </div>
             <div className="parse-result-list">
               <div>Jumlah: <strong>{parsed.amount.toLocaleString("id-ID", { style: "currency", currency: "IDR" })}</strong></div>
-              {parsed.merchant && <div>Merchant: <strong>{parsed.merchant}</strong></div>}
+              {parsed.merchant && <div>Deskripsi: <strong>{parsed.merchant}</strong></div>}
               {parsed.category_name && <div>Kategori: <strong>{parsed.category_name}</strong></div>}
               {parsed.account_name && <div>Akun: <strong>{parsed.account_name}</strong></div>}
-              <div>Jenis: <strong>{parsed.transaction_type === "income" ? "Pemasukan" : "Pengeluaran"}</strong></div>
+              {parsed.destination_account_name && <div>Ke akun: <strong>{parsed.destination_account_name}</strong></div>}
+              <div>Jenis: <strong>{parsed.transaction_type === "income" ? "Pemasukan" : parsed.transaction_type === "transfer" ? "Transfer" : "Pengeluaran"}</strong></div>
               <div>Tanggal: <strong>{parsed.transaction_date}</strong></div>
             </div>
             <div className="mt-16 flex parse-result-actions">
