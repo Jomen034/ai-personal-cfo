@@ -80,30 +80,23 @@ export class GeminiParser implements TransactionParser {
     const categoryList = (categories || []).map((c) => c.name);
     const accountList = (accounts || []).map((a) => a.name);
 
-    const prompt = `Parse this Indonesian transaction into JSON.
+    const prompt = `Parse this Indonesian financial text into JSON.
 
 Accounts: ${JSON.stringify(accountList)}
 Categories: ${JSON.stringify(categoryList)}
 
-Input: "${input}"
+Text: "${input}"
 
-Rules:
-- type: expense, income, or transfer (transfer ONLY if moving between accounts)
-- amount: number (convert 50k -> 50000, 1.2jt -> 1200000)
-- account_name: source account or null
-- destination_account_name: target account for transfers, else null
-- category: best match from list
-- description: clean context
+Instructions:
+- If text mentions transfer/tf/kirim/pindah between accounts: type=transfer, account_name=source, destination_account_name=target
+- Else if text mentions gaji/bonus/terima/dapat: type=income
+- Else: type=expense
+- amount: numeric value (25rb=25000, 5jt=5000000)
+- category: best match from list above
+- description: brief context
 
-Return ONLY valid JSON:
-{
-  "type": "expense" | "income" | "transfer",
-  "amount": 0,
-  "category": "",
-  "account_name": null,
-  "destination_account_name": null,
-  "description": ""
-}`;
+Return ONLY JSON:
+{"type":"expense","amount":0,"category":"","account_name":null,"destination_account_name":null,"description":""}`;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
