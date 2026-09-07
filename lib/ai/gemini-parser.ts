@@ -70,20 +70,23 @@ function bestMatch(name: string, candidates: Array<{ id: string; name: string }>
 }
 
 export class GeminiParser implements TransactionParser {
-  async parse(input: string, householdId: string): Promise<ParsedTransaction> {
+  async parse(input: string, householdId: string, options?: { accounts?: Array<{ id: string; name: string }>; categories?: Array<{ id: string; name: string }> }): Promise<ParsedTransaction> {
     if (!GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY tidak dikonfigurasi di server.");
     }
 
     const supabase = await createClient();
 
-    const [{ data: categories }, { data: accounts }] = await Promise.all([
+    const [{ data: dbCategories }, { data: dbAccounts }] = await Promise.all([
       supabase.from("categories").select("id, name, type").is("household_id", null),
       supabase.from("accounts").select("id, name, account_type").eq("household_id", householdId),
     ]);
 
-    const categoryList = (categories || []).map((c) => c.name);
-    const accountList = (accounts || []).map((a) => a.name);
+    const categories = options?.categories || (dbCategories || []);
+    const accounts = options?.accounts || (dbAccounts || []);
+
+    const categoryList = categories.map((c) => c.name);
+    const accountList = accounts.map((a) => a.name);
 
     const prompt = `Parse this Indonesian financial text into JSON.
 

@@ -7,14 +7,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { input, household_id } = await request.json();
+    const { input, household_id, accounts, categories } = await request.json();
 
     if (!input || !household_id) {
       return NextResponse.json({ error: "Input dan household_id diperlukan" }, { status: 400 });
     }
 
     const parser = new GeminiParser();
-    const result = await parser.parse(input, household_id);
+    const result = await parser.parse(input, household_id, { accounts, categories });
 
     return NextResponse.json(result);
   } catch (error) {

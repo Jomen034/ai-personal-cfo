@@ -39,7 +39,12 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       const res = await fetch("/api/parse-transaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input, household_id: householdId }),
+        body: JSON.stringify({
+          input,
+          household_id: householdId,
+          accounts: accounts.map((a) => ({ id: a.id, name: a.name })),
+          categories: categories.map((c) => ({ id: c.id, name: c.name })),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Gagal memproses");

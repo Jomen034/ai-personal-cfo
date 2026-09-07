@@ -12,5 +12,5 @@ export interface ParsedTransaction {
 }
 
 export interface TransactionParser {
-  parse(input: string, householdId: string): Promise<ParsedTransaction>;
+  parse(input: string, householdId: string, options?: { accounts?: Array<{ id: string; name: string }>; categories?: Array<{ id: string; name: string }> }): Promise<ParsedTransaction>;
 }
