@@ -150,6 +150,10 @@ Return ONLY JSON:
         ? bestMatch(parsed.destination_account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
         : null;
 
+      console.log("[GeminiParser] accounts:", JSON.stringify(accounts));
+      console.log("[GeminiParser] parsed.account_name:", parsed.account_name, "=> accountMatch:", accountMatch);
+      console.log("[GeminiParser] parsed.destination_account_name:", parsed.destination_account_name, "=> destinationAccountMatch:", destinationAccountMatch);
+
       return {
         transaction_type: parsed.type,
         amount: Math.round(parsed.amount),
