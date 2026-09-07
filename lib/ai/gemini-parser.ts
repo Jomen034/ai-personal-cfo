@@ -136,6 +136,7 @@ Return ONLY JSON:
       const parsed = extractJson(text);
       if (!parsed) {
         console.error("Gemini non-JSON response:", text);
+        console.error("Gemini full data:", JSON.stringify(data).slice(0, 500));
         throw new Error("Format respons AI tidak valid");
       }
 
