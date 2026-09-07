@@ -140,7 +140,9 @@ Return ONLY JSON:
         throw new Error("Format respons AI tidak valid");
       }
 
-      const categoryMatch = bestMatch(parsed.category, (categories || []).map((c) => ({ id: c.id, name: c.name })));
+      const categoryMatch = parsed.category
+        ? bestMatch(parsed.category, (categories || []).map((c) => ({ id: c.id, name: c.name })))
+        : null;
       const accountMatch = parsed.account_name
         ? bestMatch(parsed.account_name, (accounts || []).map((a) => ({ id: a.id, name: a.name })))
         : null;
