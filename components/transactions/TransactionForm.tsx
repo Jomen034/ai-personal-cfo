@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -23,14 +23,16 @@ type ParsedResult = {
 };
 
 export function TransactionForm({ memberId, householdId, accounts, categories }: { memberId: string; householdId: string; accounts: Option[]; categories: Option[] }) {
-  const [type, setType] = useState<"income" | "expense">("expense");
+  const [type, setType] = useState<"income" | "expense" | "transfer">("expense");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [parsing, setParsing] = useState(false);
   const [parsed, setParsed] = useState<ParsedResult | null>(null);
+  const [transferType, setTransferType] = useState<"internal" | "external" | null>(null);
+  const nlInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const filteredCategories = categories.filter((category) => category.type === type);
+  const filteredCategories = categories.filter((category) => category.type === type || type === "transfer");
 
   async function parseNaturalLanguage(input: string) {
     setParsing(true);
@@ -67,19 +69,28 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
     }
   }
 
-  function applyParsedToForm() {
+  function applyParsedToForm(clearInput = false) {
     if (!parsed) return;
     const form = document.getElementById("transaction-form") as HTMLFormElement | null;
     if (!form) return;
     const amountInput = form.querySelector('input[name="amount"]') as HTMLInputElement | null;
     const categorySelect = form.querySelector('select[name="category_id"]') as HTMLSelectElement | null;
     const accountSelect = form.querySelector('select[name="account_id"]') as HTMLSelectElement | null;
+    const destSelect = form.querySelector('select[name="destination_account_id"]') as HTMLSelectElement | null;
     const dateInput = form.querySelector('input[name="transaction_date"]') as HTMLInputElement | null;
     if (amountInput && parsed.amount) amountInput.value = String(parsed.amount);
     if (categorySelect && parsed.category_id) categorySelect.value = parsed.category_id;
     if (accountSelect && parsed.account_id) accountSelect.value = parsed.account_id;
+    if (destSelect && parsed.destination_account_id) destSelect.value = parsed.destination_account_id;
     if (dateInput && parsed.transaction_date) dateInput.value = parsed.transaction_date;
+    if (parsed.transfer_type) {
+      setTransferType(parsed.transfer_type);
+    }
     setType(parsed.transaction_type === "transfer" ? "expense" : parsed.transaction_type);
+    setParsed(null);
+    if (clearInput && nlInputRef.current) {
+      nlInputRef.current.value = "";
+    }
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -101,18 +112,19 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       note: String(data.get("note") || ""),
     };
 
+    if (type === "transfer") {
+      payload.transaction_type = "expense";
+      payload.transfer_type = transferType || "internal";
+      const destAccount = data.get("destination_account_id");
+      if (destAccount && String(destAccount)) {
+        payload.destination_account_id = String(destAccount);
+      }
+    }
+
     if (parsed?.raw_input) {
       payload.raw_input = parsed.raw_input;
       payload.parsed_confidence = parsed.confidence;
       payload.reviewed_flag = true;
-    }
-
-    if (parsed?.transfer_type) {
-      payload.transaction_type = "expense";
-      payload.transfer_type = parsed.transfer_type;
-      if (parsed.destination_account_id) {
-        payload.destination_account_id = parsed.destination_account_id;
-      }
     }
 
     const { error: insertError } = await supabase.from("transactions").insert(payload);
@@ -131,12 +143,14 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
       <div className="segmented">
         <button type="button" className={type === "expense" ? "selected" : ""} onClick={() => setType("expense")}>Pengeluaran</button>
         <button type="button" className={type === "income" ? "selected" : ""} onClick={() => setType("income")}>Pemasukan</button>
+        <button type="button" className={type === "transfer" ? "selected" : ""} onClick={() => setType("transfer")}>Transfer</button>
       </div>
 
       <div className="mt-16">
         <label className="field-label" htmlFor="nl_input">Catat dengan bahasa natural</label>
         <div className="input-group mt-12">
           <input
+            ref={nlInputRef}
             id="nl_input"
             name="nl_input"
             placeholder="Contoh: makan siang 50k di warung"
@@ -171,9 +185,9 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
               <div>Tanggal: <strong>{parsed.transaction_date}</strong></div>
             </div>
             <div className="mt-16 flex parse-result-actions">
-              <button type="button" className="primary-button flex-1" onClick={() => { setParsed(null); }}>Konfirmasi</button>
-              <button type="button" className="outline-button flex-1" onClick={applyParsedToForm}>Perbaiki</button>
-              <button type="button" className="outline-button flex-1" onClick={() => setParsed(null)}>Batal</button>
+              <button type="button" className="primary-button flex-1" onClick={() => applyParsedToForm(true)}>Konfirmasi</button>
+              <button type="button" className="outline-button flex-1" onClick={() => applyParsedToForm(false)}>Perbaiki</button>
+              <button type="button" className="outline-button flex-1" onClick={() => { setParsed(null); }}>Batal</button>
             </div>
           </div>
         )}
@@ -196,6 +210,14 @@ export function TransactionForm({ memberId, householdId, accounts, categories }:
               {accounts.map((account) => <option key={account.id} value={account.id}>{account.name}</option>)}
             </select>
           </label>
+          {type === "transfer" && (
+            <label className="field-label">Akun tujuan
+              <select name="destination_account_id" required>
+                <option value="">Pilih akun tujuan</option>
+                {accounts.map((account) => <option key={account.id} value={account.id}>{account.name}</option>)}
+              </select>
+            </label>
+          )}
         </div>
         <label className="field-label">Tanggal
           <input name="transaction_date" type="date" required defaultValue={new Date().toISOString().slice(0, 10)} />
