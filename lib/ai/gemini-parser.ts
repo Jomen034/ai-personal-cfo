@@ -80,31 +80,30 @@ export class GeminiParser implements TransactionParser {
     const categoryList = (categories || []).map((c) => c.name);
     const accountList = (accounts || []).map((a) => a.name);
 
-    const prompt = `You are the Natural Language Financial Parser for 'Tumara AI Personal CFO'.
-Extract financial transaction details from the user's natural language input into a strict JSON format.
+    const prompt = `Parse this Indonesian transaction into JSON.
 
-Available User Accounts: ${JSON.stringify(accountList)}
-Available Categories: ${JSON.stringify(categoryList)}
+Accounts: ${JSON.stringify(accountList)}
+Categories: ${JSON.stringify(categoryList)}
+
+Input: "${input}"
 
 Rules:
-1. Identify if it's 'expense', 'income', or 'transfer'. Use 'transfer' ONLY if the input explicitly mentions moving money between accounts (keywords: 'transfer', 'tf', 'kirim ke', 'pindah ke', 'to [account]', 'ke [account]'). Default to 'expense' unless explicitly 'terima', 'dapat', or 'pemasukan'.
-2. Extract the exact numerical amount (convert '50k' -> 50000, '1.2jt' -> 1200000).
-3. If type is 'transfer', set account_name to the SOURCE account and destination_account_name to the TARGET account. Both must match available accounts. Category should be 'Transfer'.
-4. If type is 'expense' or 'income', match 'account_name' to the closest available account. If no match, return null.
-5. Match 'category' to the most relevant available category.
-6. Clean the remaining context as 'description'.
+- type: expense, income, or transfer (transfer ONLY if moving between accounts)
+- amount: number (convert 50k -> 50000, 1.2jt -> 1200000)
+- account_name: source account or null
+- destination_account_name: target account for transfers, else null
+- category: best match from list
+- description: clean context
 
 Return ONLY valid JSON:
 {
   "type": "expense" | "income" | "transfer",
-  "amount": number,
-  "category": string,
-  "account_name": string | null,
-  "destination_account_name": string | null,
-  "description": string
-}
-
-Input: "${input}"`;
+  "amount": 0,
+  "category": "",
+  "account_name": null,
+  "destination_account_name": null,
+  "description": ""
+}`;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
