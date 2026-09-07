@@ -88,7 +88,7 @@ Categories: ${JSON.stringify(categoryList)}
 Text: "${input}"
 
 Instructions:
-- If text mentions transfer/tf/kirim/pindah between accounts: type=transfer, account_name=source, destination_account_name=target
+- If text mentions transfer/tf/kirim/pindah/tarik between accounts: type=transfer, account_name=source, destination_account_name=target
 - Else if text mentions gaji/bonus/terima/dapat: type=income
 - Else: type=expense
 - amount: numeric value (25rb=25000, 5jt=5000000)
