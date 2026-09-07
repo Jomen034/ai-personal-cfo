@@ -120,7 +120,7 @@ Input: "${input}"`;
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0,
-            maxOutputTokens: 256,
+            maxOutputTokens: 1024,
           },
         }),
         signal: controller.signal,
